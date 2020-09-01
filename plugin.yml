@@ -1,0 +1,10 @@
+name: AdvanceParticle
+main: me.Tixius24.AdvanceParticles
+version: 9.0.0
+author: Tixius24
+website: https://www.spigotmc.org/resources/71929/
+api-version: 1.13
+commands:
+  advanceparticle:
+    description: Plugin commands for AdvancedParticle
+    aliases: ap

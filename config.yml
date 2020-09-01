@@ -1,0 +1,34 @@
+#
+# AdvanceParticle plugin configuration
+# "true" - Enable use particle
+# "false" - Disable use particle
+PARTICLES:
+  EXPLOSION_NORMAL: true
+  EXPLOSION_LARGE: true
+  FIREWORK_SPARK: true
+  WATER_SPLASH: true
+  WATER_WAKE: true
+  DEPTH_SUSPEND: true
+  CRIT: true
+  SMOKE_NORMAL: true
+  SMOKE_LARGE: true
+  SPELL: true
+  SPELL_INSTANT: true
+  SPELL_MOB: true
+  SPELL_MOB_AMBIENT: true
+  SPELL_WITCH: true
+  DRIP_WATER: true
+  DRIP_LAVA: true
+  VILLAGER_ANGRY: true
+  VILLAGER_HAPPY: true
+  TOW_AURA: true
+  NOTE: true
+  PORTAL: true
+  ENCHANT_TABLE: true
+  FLAME: true
+  LAVA: true
+  CLOUD: true
+  SNOWBALL: true
+  SLIME: true
+  HEART: true
+  BARRIER: true
