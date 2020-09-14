@@ -6,10 +6,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public class Messager {
-	private AdvanceParticles plugin;
+	private AdvanceParticle plugin;
 	private HashMap<String, String> messages = new HashMap<String, String>();
 
-	public Messager(AdvanceParticles pl) {
+	public Messager(AdvanceParticle pl) {
 		plugin = pl;
 		loadPluginMessage();
 	}

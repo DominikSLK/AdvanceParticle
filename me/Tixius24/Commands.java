@@ -7,9 +7,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class Commands implements CommandExecutor {
-	private AdvanceParticles plugin;
+	private AdvanceParticle plugin;
 
-	public Commands(AdvanceParticles pl) {
+	public Commands(AdvanceParticle pl) {
 		plugin = pl;
 	}
 
@@ -188,7 +188,7 @@ public class Commands implements CommandExecutor {
 					return true;
 				}
 
-				Location loc = p.getTargetBlock(null, 20).getLocation();
+				Location loc = p.getTargetBlock(null, 50).getLocation();
 				plugin.setParticleAtBlock(p, particle, args[1], loc.getX() + 0.5, loc.getY() + 0.5, loc.getZ() + 0.5);
 				p.sendMessage(plugin.getMessager().sendMessage("BLOCK_PARTICLE_SET"));
 				return true;

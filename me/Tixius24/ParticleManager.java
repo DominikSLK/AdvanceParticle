@@ -35,13 +35,13 @@ public enum ParticleManager {
 	private String Particle1_5_x;
 	private String Particle1_8_x;
 	private String Particle1_13_x;
-	private AdvanceParticles plugin;
+	private AdvanceParticle plugin;
 
 	private ParticleManager(String particle5, String particle8, String particle13) {
 		Particle1_5_x = particle5;
 		Particle1_8_x = particle8;
 		Particle1_13_x = particle13;
-		plugin = AdvanceParticles.getInstance();
+		plugin = AdvanceParticle.getInstance();
 	}
 
 	public String get() {

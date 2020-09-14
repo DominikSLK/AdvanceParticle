@@ -7,14 +7,16 @@ import java.util.HashMap;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import me.Tixius24.Particle.PacketPlayOutWorldParticles;
+
 public class FileManager {
-	private AdvanceParticles plugin;
+	private AdvanceParticle plugin;
 	private File cf;
 	private YamlConfiguration c;
 	private File mf;
 	private YamlConfiguration m;
 
-	public FileManager(AdvanceParticles pl) {
+	public FileManager(AdvanceParticle pl) {
 		plugin = pl;
 	}
 
@@ -77,7 +79,7 @@ public class FileManager {
 			YamlConfiguration c = YamlConfiguration.loadConfiguration(f2);
 
 			HashMap<String, Object> map = new HashMap<String, Object>();
-			map.put(c.getString("World"), plugin.createPacket(c.getString("Particle"), c.getDouble("X"), c.getDouble("Y"), c.getDouble("Z")));
+			map.put(c.getString("World"), PacketPlayOutWorldParticles.createPacket(c.getString("Particle"), c.getDouble("X"), c.getDouble("Y"), c.getDouble("Z")));
 			plugin.getBlockParticle().put(name, map);
 		}
 
