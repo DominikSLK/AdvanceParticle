@@ -1,4 +1,4 @@
-package me.Tixius24.Metrics;
+package me.Tixius24.metrics;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;

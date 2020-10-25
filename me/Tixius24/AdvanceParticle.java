@@ -3,23 +3,29 @@ package me.Tixius24;
 import java.util.HashMap;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import me.Tixius24.Metrics.Metrics_NEW;
-import me.Tixius24.Metrics.Metrics_OLD;
-import me.Tixius24.Particle.NMSUtil;
-import me.Tixius24.Particle.PacketPlayOutWorldParticles;
+import me.Tixius24.manager.FileManager;
+import me.Tixius24.manager.ParticleManager;
+import me.Tixius24.manager.StreamManager;
+import me.Tixius24.metrics.Metrics_NEW;
+import me.Tixius24.metrics.Metrics_OLD;
+import me.Tixius24.object.BlockObject;
+import me.Tixius24.packet.NMSUtil;
+import me.Tixius24.packet.PacketPlayOutWorldParticles;
 
 public class AdvanceParticle extends JavaPlugin implements Listener {
 	private HashMap<Player, String> players = new HashMap<Player, String>();
-	private HashMap<String, HashMap<String, Object>> blockSpawners = new HashMap<String, HashMap<String, Object>>();
 
 	private FileManager manager;
-	private Messager message;
+	private Messages message;
+	private StreamManager stream;
 
 	public String version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
 	private int versionNumber = Integer.parseInt(version.split("_")[1]);
@@ -39,14 +45,13 @@ public class AdvanceParticle extends JavaPlugin implements Listener {
 
 		manager = new FileManager(this);
 		manager.loadPluginFile();
-		manager.loadBlockSpawnerData();
-		message = new Messager(this);
+		stream = new StreamManager(this);
+		message = new Messages(this);
 
-		if (versionNumber < 8 || version.equals("v1_8_R1")) {
+		if (versionNumber < 8 || version.equals("v1_8_R1")) 
 			new Metrics_OLD(this, 7949);
-		} else {
+		else 
 			new Metrics_NEW(this, 7949);
-		}
 
 		Bukkit.getPluginManager().registerEvents(this, this);
 		getCommand("advanceparticle").setExecutor(new Commands(this));
@@ -79,7 +84,11 @@ public class AdvanceParticle extends JavaPlugin implements Listener {
 		return manager;
 	}
 
-	public Messager getMessager() {
+	public StreamManager getStream() {
+		return stream;
+	}
+
+	public Messages getMessager() {
 		return message;
 	}
 
@@ -89,10 +98,6 @@ public class AdvanceParticle extends JavaPlugin implements Listener {
 
 	public int getServerVersion() {
 		return versionNumber;
-	}
-
-	public HashMap<String, HashMap<String, Object>> getBlockParticle() {
-		return blockSpawners;
 	}
 
 	public int getVersionNumger() {
@@ -108,6 +113,25 @@ public class AdvanceParticle extends JavaPlugin implements Listener {
 		}
 
 		return true;
+	}
+
+	public void getSpawnerInfo(Player p, String spawner) {
+		BlockObject object = getStream().getBlockStream().get(spawner);
+		p.sendMessage(" ");
+		p.sendMessage("§7Spawner Data:");	
+		p.sendMessage("§8> §7Spawner Name: §a" + spawner);
+		p.sendMessage("§8> §7World: §a" + object.getWorld());
+		p.sendMessage("§8> §7Particle: §a" + object.getParticle());
+		p.sendMessage("§8> §7X: §a" + object.getX());
+		p.sendMessage("§8> §7Y: §a" + object.getY());
+		p.sendMessage("§8> §7Z: §a" + object.getZ());
+		p.sendMessage(" ");
+	}
+	
+	public void teleportToSpawner(Player p, String spawnerName) {
+		BlockObject object = getStream().getBlockStream().get(spawnerName);
+		Location loc = new Location(Bukkit.getWorld(object.getWorld()), object.getX(), (object.getY() + 1.0), object.getZ());
+		p.teleport(loc);
 	}
 
 	public boolean checkBlockPerm(Player p, String perm) {
@@ -153,15 +177,8 @@ public class AdvanceParticle extends JavaPlugin implements Listener {
 		return true;
 	}
 
-	public void setParticleAtBlock(Player p , String particle, String spawner, double x, double y, double z) {
-		HashMap<String, Object> map = new HashMap<String, Object>();
-		map.put(p.getWorld().getName(), PacketPlayOutWorldParticles.createPacket(particle, x, y, z));
-		getBlockParticle().put(spawner, map);
-		getManager().saveBlockSpawnerData(spawner, particle, p.getWorld().getName(), x, y, z);
-	}
-
 	public void listParticle(Player p) {
-		p.sendMessage("§8=-=-=-=-=-=-=-> §aParticle List §8<-=-=-=-=-=-=-=");
+		p.sendMessage("§8=-=-=-=-=-=-=-> §aList of Particles §8<-=-=-=-=-=-=-=");
 
 		for (ParticleManager m : ParticleManager.values()) {
 			p.sendMessage("§7> §b" + m.toString());
@@ -171,19 +188,33 @@ public class AdvanceParticle extends JavaPlugin implements Listener {
 	}
 
 	public void listSpawnerParticles(Player p) {
-		p.sendMessage("§8=-=-=-=-=-=-> §aBlock spawns list §8<-=-=-=-=-=-=");
+		p.sendMessage("§8=-=-=-=-=-=-> §aList of Spawners §8<-=-=-=-=-=-=");
 
-		for (String name : getBlockParticle().keySet()) {
-			p.sendMessage("§7> §c" + name);
+		for (String name : getStream().getBlockStream().keySet()) {
+			p.sendMessage("§7> §b" + name);
 		}
 
 		p.sendMessage("§8=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
 	}
-	
+
 	@EventHandler
-	public void playerQuit(PlayerQuitEvent e) {
-		if (plugin.getPlayers().containsKey(e.getPlayer())) {
-			plugin.getPlayers().remove(e.getPlayer());
+	public void onJoin(PlayerJoinEvent e) {
+		if (getStream().getPlayerStream().containsKey(e.getPlayer().getName())) {
+			String particle = getStream().getPlayerStream().get(e.getPlayer().getName());
+
+			if (particle.equals("NOT_SET")) {
+				return;
+			}
+
+			getPlayers().put(e.getPlayer(), particle);
+		}
+	}
+
+	@EventHandler
+	public void onQuit(PlayerQuitEvent e) {
+		if (getPlayers().containsKey(e.getPlayer())) {
+			getStream().savePlayerData(e.getPlayer(), getPlayers().get(e.getPlayer()));
+			getPlayers().remove(e.getPlayer());
 		}
 	}
 
@@ -195,17 +226,18 @@ public class AdvanceParticle extends JavaPlugin implements Listener {
 				while (true) {
 					for (Player p : players.keySet()) {
 						for (Player pl : p.getWorld().getPlayers()) {
-							NMSUtil.sendPacket(pl, PacketPlayOutWorldParticles.createPacket(p));
+							Location loc = p.getLocation();
+							NMSUtil.sendPacket(pl, PacketPlayOutWorldParticles.createPacket(players.get(p), loc.getX(), loc.getY(), loc.getZ()));
 						}
 					}
 
-					for (String name : blockSpawners.keySet()) {
-						for (String world : blockSpawners.get(name).keySet()) {
-							for (Player p : Bukkit.getWorld(world).getPlayers()) {
-								NMSUtil.sendPacket(p, blockSpawners.get(name).get(world));
-							}
-						}
+					for (String name : getStream().getBlockStream().keySet()) {
+						BlockObject object = getStream().getBlockStream().get(name);
+						Object packet = PacketPlayOutWorldParticles.createPacket(object.getParticle(), object.getX(), object.getY(), object.getZ());
 
+						for (Player p : Bukkit.getWorld(object.getWorld()).getPlayers()) {
+							NMSUtil.sendPacket(p, packet);
+						}
 					}
 
 					try {

@@ -1,30 +1,17 @@
-package me.Tixius24.Particle;
-
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
+package me.Tixius24.packet;
 
 import me.Tixius24.AdvanceParticle;
-import me.Tixius24.ParticleManager;
-import me.Tixius24.Profiles;
+import me.Tixius24.manager.ParticleManager;
+import me.Tixius24.object.ParticleObject;
 
 public class PacketPlayOutWorldParticles {
 
 	private static AdvanceParticle plugin = AdvanceParticle.getInstance();
 
-	public static Object createPacket(Player p) {
-		String particle = plugin.getPlayers().get(p);
-		Profiles profile = Profiles.valueOf(particle);
-
-		Location loc = p.getLocation();
-
-		return PacketPlayOutWorldParticles.createParticlePacket(ParticleManager.valueOf(particle), profile.getBoolean(), 
-				loc.getX(), loc.getY(), loc.getZ(), profile.getOffSet1(), profile.getOffSet2(), profile.getOffSet3(), profile.getOffSet4(), profile.getCount());
-	}
-
 	public static Object createPacket(String particle, double x, double y, double z) {
-		Profiles profile = Profiles.valueOf(particle);
+		ParticleObject profile = ParticleObject.valueOf(particle);
 
-		return PacketPlayOutWorldParticles.createParticlePacket(ParticleManager.valueOf(particle), profile.getBoolean(), x, y, z, 
+		return createParticlePacket(ParticleManager.valueOf(particle), profile.getBoolean(), x, y, z, 
 				profile.getOffSet1(), profile.getOffSet2(), profile.getOffSet3(), profile.getOffSet4(), profile.getCount());
 	}
 

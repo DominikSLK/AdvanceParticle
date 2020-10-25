@@ -78,6 +78,7 @@ public class Commands implements CommandExecutor {
 
 				if (plugin.getPlayers().containsKey(p)) { 
 					p.sendMessage(plugin.getMessager().sendMessage("REMOVE_PARTICLE_PLAYER"));
+					plugin.getStream().savePlayerData(p, "NOT_SET");
 					plugin.getPlayers().remove(p); 
 				} else 
 					p.sendMessage(plugin.getMessager().sendMessage("ERROR_PARTICLE_ACTIVE")); 
@@ -126,14 +127,46 @@ public class Commands implements CommandExecutor {
 					return true; 
 				}
 
-				if (!plugin.getBlockParticle().containsKey(args[1])) { 
+				if (!plugin.getStream().getBlockStream().containsKey(args[1])) { 
 					p.sendMessage(plugin.getMessager().sendMessage("ERROR_BLOCK")); 
 					return true; 
 				}
 
-				plugin.getBlockParticle().remove(args[1]);
-				plugin.getManager().deleteBlockSpawnerData(args[1]);
+				plugin.getStream().deleteSpawnerData(args[1]);
 				p.sendMessage(plugin.getMessager().sendMessage("BLOCK_PARTICLE_DELETE"));
+				return true;
+			}
+			
+			if (args[0].equalsIgnoreCase("info")) {
+
+				if (!p.hasPermission("advanceparticle.info")) { 
+					p.sendMessage(plugin.getMessager().sendMessage("NOPERM")); 
+					return true; 
+				}
+
+				if (!plugin.getStream().getBlockStream().containsKey(args[1])) { 
+					p.sendMessage(plugin.getMessager().sendMessage("ERROR_BLOCK")); 
+					return true; 
+				}
+
+				plugin.getSpawnerInfo(p, args[1]);
+				return true;
+			}
+			
+			if (args[0].equalsIgnoreCase("tp")) {
+
+				if (!p.hasPermission("advanceparticle.teleport")) { 
+					p.sendMessage(plugin.getMessager().sendMessage("NOPERM")); 
+					return true; 
+				}
+
+				if (!plugin.getStream().getBlockStream().containsKey(args[1])) { 
+					p.sendMessage(plugin.getMessager().sendMessage("ERROR_BLOCK")); 
+					return true; 
+				}
+
+				plugin.teleportToSpawner(p, args[1]);
+				p.sendMessage(plugin.getMessager().sendMessage("BLOCK_PARTICLE_TP"));
 				return true;
 			}
 
@@ -151,7 +184,7 @@ public class Commands implements CommandExecutor {
 				return true; 
 			}
 
-			if (plugin.getBlockParticle().containsKey(args[1])) { 
+			if (plugin.getStream().getBlockStream().containsKey(args[1])) { 
 				p.sendMessage(plugin.getMessager().sendMessage("ALREADY_BLOCK_NAME")); 
 				return true; 
 			}
@@ -167,13 +200,13 @@ public class Commands implements CommandExecutor {
 					return true;
 				}
 
-				plugin.setParticleAtBlock(p, particle, args[1], p.getLocation().getX(), p.getLocation().getY() - 0.5, p.getLocation().getZ());
+				plugin.getStream().saveBlockData(p, particle, args[1], p.getLocation().getX(), p.getLocation().getY() - 0.5, p.getLocation().getZ());
 				p.sendMessage(plugin.getMessager().sendMessage("BLOCK_PARTICLE_SET"));
 				return true;
 			}
 
 			if (args[0].equalsIgnoreCase("setlooking")) {
-				
+
 				if (plugin.getVersionNumger() < 8) {
 					p.sendMessage(plugin.getMessager().sendMessage("ERROR_USE_SERVER_COMMAND"));
 					return true;
@@ -189,7 +222,7 @@ public class Commands implements CommandExecutor {
 				}
 
 				Location loc = p.getTargetBlock(null, 50).getLocation();
-				plugin.setParticleAtBlock(p, particle, args[1], loc.getX() + 0.5, loc.getY() + 0.5, loc.getZ() + 0.5);
+				plugin.getStream().saveBlockData(p, particle, args[1], loc.getX() + 0.5, loc.getY() + 0.5, loc.getZ() + 0.5);
 				p.sendMessage(plugin.getMessager().sendMessage("BLOCK_PARTICLE_SET"));
 				return true;
 			}
@@ -212,16 +245,23 @@ public class Commands implements CommandExecutor {
 		p.sendMessage("§8> §7Plugin version: §a" + plugin.getDescription().getVersion() + " §7Developed by §aTixius24");
 		p.sendMessage("§8> §7Commands help:");
 		p.sendMessage("§8> ");
-		p.sendMessage("§8> §c/ap §8- §7Main commands");
 		p.sendMessage("§8> §c/ap help §8- §7Show all commands from plugin");
-		p.sendMessage("§8> §c/ap reload §8- §7Reload plugin messages.yml and config.yml");
-		p.sendMessage("§8> §c/ap particle §8- §7Particle effects list");
-		p.sendMessage("§8> §c/ap spawner §8- §7List of all spawn names particles");
-		p.sendMessage("§8> §c/ap remove §8- §7Remove particle effect from player");
+		p.sendMessage("§8> §c/ap particle §8- §7List of the all particles from plugin");
 		p.sendMessage("§8> §c/ap add <particle> §8- §7Set particle effect on the player!");
-		p.sendMessage("§8> §c/ap set <spawnName> <particle> §8- §7Set spawn particle effect on the block location");
-		p.sendMessage("§8> §c/ap setlooking <spawnName> <particle> §8- §7Set spawn particle effect on look block location");
-		p.sendMessage("§8> §c/ap delete <spawnName> §8- §7Delete exist particle location");
+		p.sendMessage("§8> §c/ap remove §8- §7Remove already activated particle from yourself");
+		
+		if (p.hasPermission("advanceparticle.help.admin")) {
+			p.sendMessage("§8> ");
+			p.sendMessage("§8> §7Commands for administrators:");
+			p.sendMessage("§8> §c/ap reload §8- §7Reload plugin messages.yml and config.yml");
+			p.sendMessage("§8> §c/ap spawner §8- §7List of the all named particle spawners");
+			p.sendMessage("§8> §c/ap set <name> <particle> §8- §7Set particle spawner on the block location");
+			p.sendMessage("§8> §c/ap setlooking <name> <particle> §8- §7Set particle spawner on looking block location");
+			p.sendMessage("§8> §c/ap info <spawnerName> §8- §7Show more information about the spawner");
+			p.sendMessage("§8> §c/ap tp <spawnerName> §8- §7Teleport on the spawner location");
+			p.sendMessage("§8> §c/ap delete <spawnerName> §8- §7Delete existed particle spawner from list");
+		}
+		
 		p.sendMessage("§8> ");
 		p.sendMessage("§8> §7Plugin website: §ahttps://www.spigotmc.org/resources/71929/");
 		p.sendMessage("§8=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");

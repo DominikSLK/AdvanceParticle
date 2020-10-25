@@ -1,4 +1,6 @@
-package me.Tixius24;
+package me.Tixius24.manager;
+
+import me.Tixius24.AdvanceParticle;
 
 public enum ParticleManager {
 

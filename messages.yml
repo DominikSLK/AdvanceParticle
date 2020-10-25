@@ -20,6 +20,7 @@ ERROR_USE_SERVER_COMMAND: "%prefix% &4This command is not supported on this serv
 #
 BLOCK_PARTICLE_SET: "%prefix% &7Particle spawner has been succesfully set to location"
 BLOCK_PARTICLE_DELETE: "%prefix% &7Particle spawner has been succesfully deleted!"
+BLOCK_PARTICLE_TP: "%prefix% &7You has been succesfully telepored to spawner location!"
 ALREADY_BLOCK_NAME: "%prefix% &cThis spawner name is already use!"
 #
 #

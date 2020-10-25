@@ -1,6 +1,6 @@
-package me.Tixius24;
+package me.Tixius24.object;
 
-public enum Profiles {
+public enum ParticleObject {
 
 	EXPLOSION_NORMAL(true, 0.1f, 0.7f, 0.1f, 0.1f, 3),
 	EXPLOSION_LARGE(true, 0.02f, 0.5f, 0.02f, 0.02f, 1),
@@ -39,7 +39,7 @@ public enum Profiles {
 	private float e;
 	private int f;
 
-	private Profiles(boolean bol, float arg1, float arg2, float arg3, float arg4, int count) {
+	private ParticleObject(boolean bol, float arg1, float arg2, float arg3, float arg4, int count) {
 		a = bol;
 		b = arg1;
 		c = arg2;

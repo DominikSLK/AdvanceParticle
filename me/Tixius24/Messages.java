@@ -5,11 +5,11 @@ import java.util.HashMap;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-public class Messager {
+public class Messages {
 	private AdvanceParticle plugin;
 	private HashMap<String, String> messages = new HashMap<String, String>();
 
-	public Messager(AdvanceParticle pl) {
+	public Messages(AdvanceParticle pl) {
 		plugin = pl;
 		loadPluginMessage();
 	}
