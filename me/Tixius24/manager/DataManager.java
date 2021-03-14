@@ -2,7 +2,7 @@ package me.Tixius24.manager;
 
 import me.Tixius24.AdvanceParticle;
 
-public enum ParticleManager {
+public enum DataManager {
 
 	EXPLOSION_NORMAL("explode","EXPLOSION_NORMAL", "poof"),
 	EXPLOSION_LARGE("largeexplode","EXPLOSION_LARGE", "explosion"),
@@ -39,7 +39,7 @@ public enum ParticleManager {
 	private String Particle1_13_x;
 	private AdvanceParticle plugin;
 
-	private ParticleManager(String particle5, String particle8, String particle13) {
+	private DataManager(String particle5, String particle8, String particle13) {
 		Particle1_5_x = particle5;
 		Particle1_8_x = particle8;
 		Particle1_13_x = particle13;

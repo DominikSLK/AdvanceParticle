@@ -1,7 +1,7 @@
 package me.Tixius24.packet;
 
 import me.Tixius24.AdvanceParticle;
-import me.Tixius24.manager.ParticleManager;
+import me.Tixius24.manager.DataManager;
 import me.Tixius24.object.ParticleObject;
 
 public class PacketPlayOutWorldParticles {
@@ -11,14 +11,14 @@ public class PacketPlayOutWorldParticles {
 	public static Object createPacket(String particle, double x, double y, double z) {
 		ParticleObject profile = ParticleObject.valueOf(particle);
 
-		return createParticlePacket(ParticleManager.valueOf(particle), profile.getBoolean(), x, y, z, 
+		return createParticlePacket(DataManager.valueOf(particle), profile.getBoolean(), x, y, z, 
 				profile.getOffSet1(), profile.getOffSet2(), profile.getOffSet3(), profile.getOffSet4(), profile.getCount());
 	}
 
-	private static Object createParticlePacket(ParticleManager particleManager, boolean b, double X, double Y, double Z, float offSetX, float offSetY, float offSetZ, float speed, int count) {
+	private static Object createParticlePacket(DataManager particleManager, boolean b, double X, double Y, double Z, float offSetX, float offSetY, float offSetZ, float speed, int count) {
 		Object packet = NMSUtil.getPacket(getPacketName());
 
-		if (plugin.getServerVersion() > 12) {
+		if (plugin.getVersionNumger() > 12) {
 			NMSUtil.setField(packet, "j", NMSUtil.getParticle(particleManager.get()));
 			NMSUtil.setField(packet, "a", (float) X);
 			NMSUtil.setField(packet, "b", (float) Y);
@@ -41,13 +41,13 @@ public class PacketPlayOutWorldParticles {
 		NMSUtil.setField(packet, "g", offSetZ);
 		NMSUtil.setField(packet, "h", speed);
 		NMSUtil.setField(packet, "i", count);
-		if (plugin.getServerVersion() >= 8) NMSUtil.setField(packet, "j", b);
+		if (plugin.getVersionNumger() >= 8) NMSUtil.setField(packet, "j", b);
 
 		return packet;
 	}
 
 	private static String getPacketName() {
-		if (plugin.getServerVersion() < 7) {
+		if (plugin.getVersionNumger() < 7) {
 			return "Packet63WorldParticles";
 		}
 

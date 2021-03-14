@@ -6,8 +6,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.HashMap;
 
-import org.bukkit.entity.Player;
-
 import me.Tixius24.AdvanceParticle;
 import me.Tixius24.object.BlockObject;
 
@@ -19,8 +17,7 @@ public class StreamManager {
 
 	public StreamManager(AdvanceParticle pl) {
 		plugin = pl;
-		loadPlayerData();
-		loadBlockData();
+		
 	}
 
 	public HashMap<String, String> getPlayerStream() {
@@ -32,7 +29,7 @@ public class StreamManager {
 	}
 
 	@SuppressWarnings("unchecked")
-	private void loadPlayerData() {
+	public void loadPlayerData() {
 		try {
 			FileInputStream in = new FileInputStream(plugin.getDataFolder().getAbsolutePath().toString() + "/data/player.db");
 			ObjectInputStream str = new ObjectInputStream(in);
@@ -41,23 +38,14 @@ public class StreamManager {
 			in.close();
 		} catch (Exception ex) {
 			// If is plugin first running on the server player.db file is missing, here is code on the default generating file
-
-			try {
-				FileOutputStream out = new FileOutputStream(plugin.getDataFolder().getAbsolutePath().toString() + "/data/player.db");
-				ObjectOutputStream str = new ObjectOutputStream(out);
-				str.writeObject(playerData);
-				str.close();
-				out.close();
-			} catch (Exception ex1) {
-				ex1.printStackTrace();
-			}
-
+			
+			savePlayerFile();
 		}
 
 	}
 
 	@SuppressWarnings("unchecked")
-	private void loadBlockData() {
+	public void loadBlockData() {
 		try {
 			FileInputStream in = new FileInputStream(plugin.getDataFolder().getAbsolutePath().toString() + "/data/block.db");
 			ObjectInputStream str = new ObjectInputStream(in);
@@ -67,45 +55,35 @@ public class StreamManager {
 		} catch (Exception ex) {
 			// If is plugin first running on the server block.db file is missing, here is code on the default generating file
 
-			try {
-				FileOutputStream out = new FileOutputStream(plugin.getDataFolder().getAbsolutePath().toString() + "/data/block.db");
-				ObjectOutputStream str = new ObjectOutputStream(out);
-				str.writeObject(blockData);
-				str.close();
-				out.close();
-			} catch (Exception ex1) {
-				ex1.printStackTrace();
-			}
-
+			saveBlockFile();
 		}
 
 	}
 
-	public void deleteSpawnerData(String spawnerName) {
-		getBlockStream().remove(spawnerName);
+	public void deleteBlockData(String spawner) {
+		getBlockStream().remove(spawner);
 		saveBlockFile();
 	}
-
-	public void savePlayerData(Player p, String particle) {
+	
+	public void deletePlayerData(String name) {
+		getPlayerStream().remove(name);
+		savePlayerFile();
+	}
+	
+	public void savePlayerFile() {
 		try {
-			playerData.put(p.getName(), particle);
 			FileOutputStream out = new FileOutputStream(plugin.getDataFolder().getAbsolutePath().toString() + "/data/player.db");
 			ObjectOutputStream str = new ObjectOutputStream(out);
 			str.writeObject(playerData);
 			str.close();
 			out.close();
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		} catch (Exception ex1) {
+			ex1.printStackTrace();
 		}
+
 	}
 
-	public void saveBlockData(Player p , String particle, String spawner, double x, double y, double z) {
-		BlockObject object = new BlockObject(particle, p.getWorld().getName(), x, y,z);
-		blockData.put(spawner, object);
-		saveBlockFile();
-	}
-
-	private void saveBlockFile() {
+	public void saveBlockFile() {
 		try {
 			FileOutputStream out = new FileOutputStream(plugin.getDataFolder().getAbsolutePath().toString() + "/data/block.db");
 			ObjectOutputStream str = new ObjectOutputStream(out);

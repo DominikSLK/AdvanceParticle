@@ -1,5 +1,7 @@
 package me.Tixius24;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 
 import org.bukkit.Bukkit;
@@ -12,7 +14,8 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.Tixius24.manager.FileManager;
-import me.Tixius24.manager.ParticleManager;
+import me.Tixius24.manager.MySQLManager;
+import me.Tixius24.manager.APManager;
 import me.Tixius24.manager.StreamManager;
 import me.Tixius24.metrics.Metrics_NEW;
 import me.Tixius24.metrics.Metrics_OLD;
@@ -26,15 +29,19 @@ public class AdvanceParticle extends JavaPlugin implements Listener {
 	private FileManager manager;
 	private Messages message;
 	private StreamManager stream;
+	private MySQLManager mysql;
+	private APManager ap_manager;
 
-	public String version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
+	private String version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
 	private int versionNumber = Integer.parseInt(version.split("_")[1]);
 	private static AdvanceParticle plugin;
+
+	public boolean useMySQL = false;
 
 	public void onEnable() {
 		plugin = this;
 
-		if (getServerVersion() < 5 || getServerVersion() > 16) {
+		if (getVersionNumger() < 5 || getVersionNumger() > 16) {
 			consoleLog("§8=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
 			consoleLog("§c> AdvanceParticle plugin cannot support that server version!");
 			consoleLog("§c> AdvanceParticle plugin has been turned off !!!");
@@ -43,10 +50,13 @@ public class AdvanceParticle extends JavaPlugin implements Listener {
 			return;
 		}
 
+
 		manager = new FileManager(this);
 		manager.loadPluginFile();
+		useMySQL = manager.getPluginConfig().getBoolean("MySQL.enable");
 		stream = new StreamManager(this);
 		message = new Messages(this);
+		ap_manager = new APManager(this);
 
 		if (versionNumber < 8 || version.equals("v1_8_R1")) 
 			new Metrics_OLD(this, 7949);
@@ -56,6 +66,10 @@ public class AdvanceParticle extends JavaPlugin implements Listener {
 		Bukkit.getPluginManager().registerEvents(this, this);
 		getCommand("advanceparticle").setExecutor(new Commands(this));
 
+		mysql = new MySQLManager(this, manager.getPluginConfig().getString("MySQL.host"), manager.getPluginConfig().getString("MySQL.database"), manager.getPluginConfig().getString("MySQL.username")
+				, manager.getPluginConfig().getString("MySQL.password"), manager.getPluginConfig().getString("MySQL.table"), manager.getPluginConfig().getInt("MySQL.port"));
+
+		loadStartTUP();
 		updateParticle();
 
 		consoleLog("§8=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
@@ -66,6 +80,12 @@ public class AdvanceParticle extends JavaPlugin implements Listener {
 	}
 
 	public void onDisable() {
+		if (useMySQL) {
+			if (getMySQL().getConnection() != null) {
+				getMySQL().closeConnection();
+			}
+		}
+
 		consoleLog("§8=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
 		consoleLog("§a> AdvanceParticle plugin has been successfully disable!");
 		consoleLog("§a> Spigot link:§c https://www.spigotmc.org/resources/71929/");
@@ -74,6 +94,10 @@ public class AdvanceParticle extends JavaPlugin implements Listener {
 
 	public static AdvanceParticle getInstance() {
 		return plugin;
+	}
+
+	public APManager getAPManager() {
+		return ap_manager;
 	}
 
 	public void consoleLog(String message) {
@@ -92,130 +116,75 @@ public class AdvanceParticle extends JavaPlugin implements Listener {
 		return message;
 	}
 
+	public MySQLManager getMySQL() {
+		return mysql;
+	}
+
 	public HashMap<Player, String> getPlayers() {
 		return players;
 	}
 
-	public int getServerVersion() {
-		return versionNumber;
+	public String getServerVersion() {
+		return version;
 	}
 
 	public int getVersionNumger() {
 		return versionNumber;
 	}
 
-	public boolean checkExistParticle(String particle , Player p) {
-		try { 
-			if (ParticleManager.valueOf(particle) == null); 
-		} catch (IllegalArgumentException ex) { 
-			p.sendMessage(getMessager().sendMessage("ERROR_PARTICLE")); 
-			return false; 
-		}
-
-		return true;
-	}
-
-	public void getSpawnerInfo(Player p, String spawner) {
-		BlockObject object = getStream().getBlockStream().get(spawner);
-		p.sendMessage(" ");
-		p.sendMessage("§7Spawner Data:");	
-		p.sendMessage("§8> §7Spawner Name: §a" + spawner);
-		p.sendMessage("§8> §7World: §a" + object.getWorld());
-		p.sendMessage("§8> §7Particle: §a" + object.getParticle());
-		p.sendMessage("§8> §7X: §a" + object.getX());
-		p.sendMessage("§8> §7Y: §a" + object.getY());
-		p.sendMessage("§8> §7Z: §a" + object.getZ());
-		p.sendMessage(" ");
-	}
-	
-	public void teleportToSpawner(Player p, String spawnerName) {
-		BlockObject object = getStream().getBlockStream().get(spawnerName);
-		Location loc = new Location(Bukkit.getWorld(object.getWorld()), object.getX(), (object.getY() + 1.0), object.getZ());
-		p.teleport(loc);
-	}
-
-	public boolean checkBlockPerm(Player p, String perm) {
-		if (!p.hasPermission("advanceparticle.block.*") && !p.hasPermission("advanceparticle.block." + perm.toLowerCase())) { 
-			p.sendMessage(getMessager().sendMessage("NOPERM")); 
-			return false; 
-		}
-
-		return true;
-	}
-
-	public boolean checkPlayerPerm(Player p, String perm) {
-		if (!p.hasPermission("advanceparticle.player.*") && !p.hasPermission("advanceparticle.player." + perm.toLowerCase())) { 
-			p.sendMessage(getMessager().sendMessage("NOPERM")); 
-			return false; 
-		}
-
-		return true;
-	}
-
-	public boolean checkEnableParticle(Player p, String particle) {
-		if (!getManager().getPluginConfig().getBoolean("PARTICLES." + particle)) { 
-			p.sendMessage(getMessager().sendMessage("ERROR_PARTICLE_USE")); 
-			return false; 
-		}
-
-		return true;
-	}
-
-	public boolean checkAllowUseParticle(String particle) {
-		if (versionNumber < 7) {
-			if (particle.equalsIgnoreCase("water_wake") || particle.equalsIgnoreCase("barrier")) { 
-				return false;
-			}
-		}
-
-		if (versionNumber == 7) {
-			if (particle.equalsIgnoreCase("barrier")) { 
-				return false; 
-			}
-		}
-
-		return true;
-	}
-
-	public void listParticle(Player p) {
-		p.sendMessage("§8=-=-=-=-=-=-=-> §aList of Particles §8<-=-=-=-=-=-=-=");
-
-		for (ParticleManager m : ParticleManager.values()) {
-			p.sendMessage("§7> §b" + m.toString());
-		}
-
-		p.sendMessage("§8=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
-	}
-
-	public void listSpawnerParticles(Player p) {
-		p.sendMessage("§8=-=-=-=-=-=-> §aList of Spawners §8<-=-=-=-=-=-=");
-
-		for (String name : getStream().getBlockStream().keySet()) {
-			p.sendMessage("§7> §b" + name);
-		}
-
-		p.sendMessage("§8=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
-	}
-
 	@EventHandler
 	public void onJoin(PlayerJoinEvent e) {
-		if (getStream().getPlayerStream().containsKey(e.getPlayer().getName())) {
-			String particle = getStream().getPlayerStream().get(e.getPlayer().getName());
+		Player p = e.getPlayer();
 
-			if (particle.equals("NOT_SET")) {
-				return;
+		if (p == null) {
+			return;
+		}
+
+		String name = p.getName();
+
+		if (useMySQL) {
+			if (getMySQL().existValue("players", name)) {
+				getPlayers().put(p, getMySQL().getPlayerData(name));
 			}
 
-			getPlayers().put(e.getPlayer(), particle);
+			return;
+		}
+
+		if (getStream().getPlayerStream().containsKey(name)) {
+			getPlayers().put(p, getStream().getPlayerStream().get(name));
 		}
 	}
 
 	@EventHandler
 	public void onQuit(PlayerQuitEvent e) {
-		if (getPlayers().containsKey(e.getPlayer())) {
-			getStream().savePlayerData(e.getPlayer(), getPlayers().get(e.getPlayer()));
-			getPlayers().remove(e.getPlayer());
+		Player p = e.getPlayer();
+
+		if (p == null) {
+			return;
 		}
+
+		if (getPlayers().containsKey(p)) {
+			getPlayers().remove(p);
+		}
+	}
+
+	private void loadStartTUP() {
+		if (useMySQL) {
+			int lastID = getMySQL().getLastTableID();
+
+			for (int i = 0; i < lastID; i ++) {
+				getMySQL().getBlockData(i);
+			}
+
+			return;
+		}
+
+		getStream().loadPlayerData();
+		getStream().loadBlockData();
+	}
+	
+	public String getTime() {
+		return new SimpleDateFormat("yyyy.MM.dd   HH:mm:ss").format(Calendar.getInstance().getTime());
 	}
 
 	private void updateParticle() {

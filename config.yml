@@ -32,3 +32,14 @@ PARTICLES:
   SLIME: true
   HEART: true
   BARRIER: true
+#
+# MySQL features
+# If is MySQL enable plugin save player and particles data to MySQL, local database system is disable
+MySQL:
+  enable: false
+  host: localhost
+  port: 3306
+  database: localhost
+  username: root
+  password: ''
+  table: ap_

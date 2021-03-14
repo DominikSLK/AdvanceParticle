@@ -49,7 +49,7 @@ public class NMSUtil {
 
 
 	public static Class<?> getNMSClass(String className) {
-		String name = "net.minecraft.server." + plugin.version + "." + className;
+		String name = "net.minecraft.server." + plugin.getServerVersion() + "." + className;
 		Class<?> c = null;
 		try {
 			c = Class.forName(name);
@@ -83,10 +83,10 @@ public class NMSUtil {
 	}
 
 	public static Object getParticle(String particleName) {
-		if (plugin.getServerVersion() < 8) 
+		if (plugin.getVersionNumger() < 8) 
 			return particleName;
 
-		if (plugin.getServerVersion() < 13) {
+		if (plugin.getVersionNumger() < 13) {
 			Class<?> c = NMSUtil.getNMSClass("EnumParticle");
 
 			for (Object object : c.getEnumConstants()) {
@@ -105,7 +105,7 @@ public class NMSUtil {
 			Object key = cls.getConstructor(String.class).newInstance(particleName);
 			Class<?> c = null;
 
-			if (plugin.version.equals("v1_13_R1")) {
+			if (plugin.getServerVersion().equals("v1_13_R1")) {
 				c = NMSUtil.getNMSClass("Particle");
 
 				Object object = c.getDeclaredField("REGISTRY").get(null);
