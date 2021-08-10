@@ -25,7 +25,7 @@ public class NMSUtil {
 	public static void sendPacket(Player p, Object packet) {
 		try {
 			Object nms_player = getPlayer(p);
-			Field field = nms_player.getClass().getField("playerConnection");
+			Field field = nms_player.getClass().getField(plugin.getVersionNumger() > 16 ? "b" : "playerConnection");
 			Object con_object = field.get(nms_player);
 			Method method = getMethod(con_object.getClass(), "sendPacket");
 			method.invoke(con_object, packet);
@@ -34,30 +34,47 @@ public class NMSUtil {
 		}
 	}
 
-	public static Object getPacket(String packet) {
-		Class<?> nms_class = NMSUtil.getNMSClass(packet);
-		Object object = null;
-
-		try {
-			object = nms_class.getConstructor().newInstance();
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-
-		return object;
-	}
-
-
 	public static Class<?> getNMSClass(String className) {
-		String name = "net.minecraft.server." + plugin.getServerVersion() + "." + className;
 		Class<?> c = null;
 		try {
-			c = Class.forName(name);
+			if (plugin.getVersionNumger() < 17) {
+				c = Class.forName("net.minecraft.server." + plugin.getServerVersion() + "." + className);
+			} else {
+				c = Class.forName("net.minecraft.network.protocol.game." + className);
+			}
 		} catch (ClassNotFoundException ex) {
 			ex.printStackTrace();
 		}
 
 		return c;
+	}
+
+	private static Class<?> getMinecraftKeyClass(String className) {
+		try {
+			if (plugin.getVersionNumger() > 16) {
+				return Class.forName("net.minecraft.resources." + className);
+			}
+
+			return getNMSClass(className);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+		return null;
+	}
+
+	private static Class<?> getIRegistryClass(String className) {
+		try {
+			if (plugin.getVersionNumger() > 16) {
+				return Class.forName("net.minecraft.core." + className);
+			}
+
+			return getNMSClass(className);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+		return null;
 	}
 
 	public static Object getPlayer(Entity ent) {
@@ -101,7 +118,7 @@ public class NMSUtil {
 		Object particle = null;
 
 		try {
-			Class<?> cls = NMSUtil.getNMSClass("MinecraftKey");
+			Class<?> cls = getMinecraftKeyClass("MinecraftKey");
 			Object key = cls.getConstructor(String.class).newInstance(particleName);
 			Class<?> c = null;
 
@@ -113,9 +130,9 @@ public class NMSUtil {
 				return get.invoke(object, key);
 			}
 
-			c = NMSUtil.getNMSClass("IRegistry");
+			c = getIRegistryClass("IRegistry");
 
-			Object object = c.getDeclaredField("PARTICLE_TYPE").get(null);
+			Object object = c.getDeclaredField(plugin.getVersionNumger() > 16 ? "ab" : "PARTICLE_TYPE").get(null);
 			Method gets = object.getClass().getMethod("get", cls);
 			particle = gets.invoke(object, key);
 		} catch(Exception e) {

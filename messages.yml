@@ -5,14 +5,14 @@ CONSOLE: "&4This action is not allowed from console"
 NOPERM: "&cYou don't have permission to this action"
 #
 #
-ACTIVE_PARTICLE_PLAYER: "%prefix% &7You have now activated particle &a%particle%"
-REMOVE_PARTICLE_PLAYER: "%prefix% &7Particle effect has been succesfully remove"
+ACTIVE_PARTICLE_PLAYER: "%prefix% &7You have activated particle &a%particle%"
+REMOVE_PARTICLE_PLAYER: "%prefix% &7Particle effect succesfully removed!"
 ALREADY_PARTICLE_PLAYER: "%prefix% &cYou have already activated particle!"
 #
 #
 ERROR_PARTICLE: "%prefix% &cParticle not exist, particle name is wrong!"
-ERROR_PARTICLE_USE: "%prefix% &cThis particle is disable in to the plugin!"
-ERROR_BLOCK: "%prefix% &cWrong spawner name, use /ap spawner to show all spawn name"
+ERROR_PARTICLE_USE: "%prefix% &cThis particle is disable by plugin!"
+ERROR_BLOCK: "%prefix% &cWrong spawner name, use /ap spawner to see all spawn name"
 ERROR_PARTICLE_ACTIVE: "%prefix% &cYou don't have activated particle effect!"
 ERROR_USE_SERVER_VERSION: "%prefix% &4This particle is not allowed on this server version!"
 ERROR_USE_SERVER_COMMAND: "%prefix% &4This command is not supported on this server version!"

@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 
 import me.Tixius24.AdvanceParticle;
 import me.Tixius24.object.BlockObject;
+import me.Tixius24.object.ParticleObject;
 
 public class APManager {
 	private AdvanceParticle plugin;
@@ -130,7 +131,7 @@ public class APManager {
 
 	public boolean checkExistParticle(String particle , Player p) {
 		try { 
-			if (DataManager.valueOf(particle) == null); 
+			if (ParticleObject.valueOf(particle) == null); 
 		} catch (IllegalArgumentException ex) { 
 			p.sendMessage(plugin.getMessager().sendMessage("ERROR_PARTICLE")); 
 			return false; 
@@ -148,7 +149,7 @@ public class APManager {
 	public void listParticle(Player p) {
 		p.sendMessage("§8=-=-=-=-=-=-=-> §aList of Particles §8<-=-=-=-=-=-=-=");
 
-		for (DataManager m : DataManager.values()) {
+		for (ParticleObject m : ParticleObject.values()) {
 			p.sendMessage("§7> §b" + m.toString());
 		}
 

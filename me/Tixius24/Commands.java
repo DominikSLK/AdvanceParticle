@@ -233,7 +233,7 @@ public class Commands implements CommandExecutor {
 	}
 
 	private void sendDefaultHelp(Player p) {
-		p.sendMessage("§8§l> §c§lAdvanceParticle §7plugin by: §a§lTixius24 ");
+		p.sendMessage("§8§l> §c§lAdvanceParticle §7plugin by: §a§lTixius24");
 		p.sendMessage("§8§l> §a§lhttps://www.spigotmc.org/resources/71929/");
 		p.sendMessage("§8§l§8§l> §7For more info use §c§l/ap help");
 	}

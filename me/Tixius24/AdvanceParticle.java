@@ -41,11 +41,11 @@ public class AdvanceParticle extends JavaPlugin implements Listener {
 	public void onEnable() {
 		plugin = this;
 
-		if (getVersionNumger() < 5 || getVersionNumger() > 16) {
-			consoleLog("§8=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
-			consoleLog("§c> AdvanceParticle plugin cannot support that server version!");
-			consoleLog("§c> AdvanceParticle plugin has been turned off !!!");
-			consoleLog("§8=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
+		if (getVersionNumger() < 5 || getVersionNumger() > 17) {
+			consoleLog("§8=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
+			consoleLog("§c> Server version is not supported!!");
+			consoleLog("§c> AdvanceParticle plugin is turned off !!!");
+			consoleLog("§8=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
 			Bukkit.getPluginManager().disablePlugin(this);
 			return;
 		}
@@ -72,11 +72,10 @@ public class AdvanceParticle extends JavaPlugin implements Listener {
 		loadStartTUP();
 		updateParticle();
 
-		consoleLog("§8=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
+		consoleLog("§8=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
 		consoleLog("§a> AdvanceParticle plugin has been successfully loaded!");
 		consoleLog("§a> Server version:§c " + version.replace("v", "") + " §aPlugin version §c" + getDescription().getVersion());
-		consoleLog("§a> Spigot link:§c https://www.spigotmc.org/resources/71929/");
-		consoleLog("§8=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
+		consoleLog("§8=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
 	}
 
 	public void onDisable() {
@@ -86,10 +85,9 @@ public class AdvanceParticle extends JavaPlugin implements Listener {
 			}
 		}
 
-		consoleLog("§8=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
+		consoleLog("§8=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
 		consoleLog("§a> AdvanceParticle plugin has been successfully disable!");
-		consoleLog("§a> Spigot link:§c https://www.spigotmc.org/resources/71929/");
-		consoleLog("§8=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
+		consoleLog("§8=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
 	}
 
 	public static AdvanceParticle getInstance() {
@@ -182,7 +180,7 @@ public class AdvanceParticle extends JavaPlugin implements Listener {
 		getStream().loadPlayerData();
 		getStream().loadBlockData();
 	}
-	
+
 	public String getTime() {
 		return new SimpleDateFormat("yyyy.MM.dd   HH:mm:ss").format(Calendar.getInstance().getTime());
 	}
@@ -193,27 +191,25 @@ public class AdvanceParticle extends JavaPlugin implements Listener {
 			@Override
 			public void run() {
 				while (true) {
-					for (Player p : players.keySet()) {
-						for (Player pl : p.getWorld().getPlayers()) {
-							Location loc = p.getLocation();
-							NMSUtil.sendPacket(pl, PacketPlayOutWorldParticles.createPacket(players.get(p), loc.getX(), loc.getY(), loc.getZ()));
-						}
-					}
-
-					for (String name : getStream().getBlockStream().keySet()) {
-						BlockObject object = getStream().getBlockStream().get(name);
-						Object packet = PacketPlayOutWorldParticles.createPacket(object.getParticle(), object.getX(), object.getY(), object.getZ());
-
-						for (Player p : Bukkit.getWorld(object.getWorld()).getPlayers()) {
-							NMSUtil.sendPacket(p, packet);
-						}
-					}
-
 					try {
+						for (Player p : players.keySet()) {
+							for (Player pl : p.getWorld().getPlayers()) {
+								Location loc = p.getLocation();
+								NMSUtil.sendPacket(pl, PacketPlayOutWorldParticles.createPacket(players.get(p), loc.getX(), loc.getY(), loc.getZ()));
+							}
+						}
+
+						for (String name : getStream().getBlockStream().keySet()) {
+							BlockObject object = getStream().getBlockStream().get(name);
+							Object packet = PacketPlayOutWorldParticles.createPacket(object.getParticle(), object.getX(), object.getY(), object.getZ());
+
+							for (Player p : Bukkit.getWorld(object.getWorld()).getPlayers()) {
+								NMSUtil.sendPacket(p, packet);
+							}
+						}
+
 						Thread.sleep(250); // 1000 = 1 seconds
-					} catch (Exception ex) {
-						ex.printStackTrace(); 
-					}
+					} catch (Exception ex) { /* Empty place */ }
 				}
 
 			}
