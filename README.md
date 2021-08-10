@@ -1,5 +1,5 @@
 # AdvanceParticle
-Hello offical source code for resource AdvanceParticle 	
+Hello offical source code for resource AdvanceParticle 	\n
 Spigot link: https://www.spigotmc.org/resources/71929/ 	
 Last plugin version: 12.0.0 
 
