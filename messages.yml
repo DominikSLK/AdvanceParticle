@@ -1,5 +1,5 @@
 #
-# Default AdvanceParticle plugin messages
+# Default message from AdvanceParticle plugin
 PREFIX: "&8[&cAP&8]"
 CONSOLE: "&4This action is not allowed from console"
 NOPERM: "&cYou don't have permission to this action"

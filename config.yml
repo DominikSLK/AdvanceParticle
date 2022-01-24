@@ -1,5 +1,5 @@
 #
-# AdvanceParticle plugin configuration
+# AdvanceParticle plugin config file
 # "true" - Enable use particle
 # "false" - Disable use particle
 PARTICLES:

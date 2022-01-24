@@ -57,7 +57,7 @@ public class AdvanceParticle extends JavaPlugin implements Listener {
 		message = new Messages(this);
 		ap_manager = new APManager(this);
 
-		if (versionNumber > 8 || version.equals("v1_8_R2") || version.equals("v1_8_R2")) 
+		if (versionNumber > 8 || version.equals("v1_8_R2") || version.equals("v1_8_R3")) 
 			new Metrics(this, 7949);
 
 
