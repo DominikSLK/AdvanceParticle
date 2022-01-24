@@ -23,14 +23,14 @@ import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.zip.GZIPOutputStream;
 
-public class Metrics_NEW {
+public class Metrics {
 
 	static {
 		if (System.getProperty("bstats.relocatecheck") == null || !System.getProperty("bstats.relocatecheck").equals("false")) {
 			final String defaultPackage = new String(
 					new byte[]{'o', 'r', 'g', '.', 'b', 's', 't', 'a', 't', 's', '.', 'b', 'u', 'k', 'k', 'i', 't'});
 			final String examplePackage = new String(new byte[]{'y', 'o', 'u', 'r', '.', 'p', 'a', 'c', 'k', 'a', 'g', 'e'});
-			if (Metrics_NEW.class.getPackage().getName().equals(defaultPackage) || Metrics_NEW.class.getPackage().getName().equals(examplePackage)) {
+			if (Metrics.class.getPackage().getName().equals(defaultPackage) || Metrics.class.getPackage().getName().equals(examplePackage)) {
 				throw new IllegalStateException("bStats Metrics class has not been relocated correctly!");
 			}
 		}
@@ -47,7 +47,7 @@ public class Metrics_NEW {
 	private final int pluginId;
 	private final List<CustomChart> charts = new ArrayList<>();
 
-	public Metrics_NEW(Plugin plugin, int pluginId) {
+	public Metrics(Plugin plugin, int pluginId) {
 		if (plugin == null) {
 			throw new IllegalArgumentException("Plugin cannot be null!");
 		}
@@ -93,7 +93,7 @@ public class Metrics_NEW {
 				} catch (NoSuchFieldException ignored) { }
 			}
 
-			Bukkit.getServicesManager().register(Metrics_NEW.class, this, plugin, ServicePriority.Normal);
+			Bukkit.getServicesManager().register(Metrics.class, this, plugin, ServicePriority.Normal);
 			if (!found) {
 				startSubmitting();
 			}

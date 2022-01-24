@@ -17,8 +17,7 @@ import me.Tixius24.manager.FileManager;
 import me.Tixius24.manager.MySQLManager;
 import me.Tixius24.manager.APManager;
 import me.Tixius24.manager.StreamManager;
-import me.Tixius24.metrics.Metrics_NEW;
-import me.Tixius24.metrics.Metrics_OLD;
+import me.Tixius24.metrics.Metrics;
 import me.Tixius24.object.BlockObject;
 import me.Tixius24.packet.NMSUtil;
 import me.Tixius24.packet.PacketPlayOutWorldParticles;
@@ -41,7 +40,7 @@ public class AdvanceParticle extends JavaPlugin implements Listener {
 	public void onEnable() {
 		plugin = this;
 
-		if (getVersionNumger() < 5 || getVersionNumger() > 17) {
+		if (getVersionNumger() < 5 || getVersionNumger() > 18) {
 			consoleLog("§8=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
 			consoleLog("§c> Server version is not supported!!");
 			consoleLog("§c> AdvanceParticle plugin is turned off !!!");
@@ -58,10 +57,9 @@ public class AdvanceParticle extends JavaPlugin implements Listener {
 		message = new Messages(this);
 		ap_manager = new APManager(this);
 
-		if (versionNumber < 8 || version.equals("v1_8_R1")) 
-			new Metrics_OLD(this, 7949);
-		else 
-			new Metrics_NEW(this, 7949);
+		if (versionNumber > 8 || version.equals("v1_8_R2") || version.equals("v1_8_R2")) 
+			new Metrics(this, 7949);
+
 
 		Bukkit.getPluginManager().registerEvents(this, this);
 		getCommand("advanceparticle").setExecutor(new Commands(this));
