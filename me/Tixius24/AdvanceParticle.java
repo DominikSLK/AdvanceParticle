@@ -60,7 +60,6 @@ public class AdvanceParticle extends JavaPlugin implements Listener {
 		if (versionNumber > 8 || version.equals("v1_8_R2") || version.equals("v1_8_R3")) 
 			new Metrics(this, 7949);
 
-
 		Bukkit.getPluginManager().registerEvents(this, this);
 		getCommand("advanceparticle").setExecutor(new Commands(this));
 

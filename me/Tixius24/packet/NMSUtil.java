@@ -158,6 +158,10 @@ public class NMSUtil {
 		case 17:
 			return "ab";
 		case 18:
+			if (plugin.getServerVersion().equals("v1_18_R2")) {
+				return "Z";
+			}
+			
 			return "ac";
 		default:
 			return "PARTICLE_TYPE";
