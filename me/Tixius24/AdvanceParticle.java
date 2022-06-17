@@ -40,7 +40,7 @@ public class AdvanceParticle extends JavaPlugin implements Listener {
 	public void onEnable() {
 		plugin = this;
 
-		if (getVersionNumger() < 5 || getVersionNumger() > 18) {
+		if (getVersionNumger() < 5 || getVersionNumger() > 19) {
 			consoleLog("§8=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
 			consoleLog("§c> Server version is not supported!!");
 			consoleLog("§c> AdvanceParticle plugin is turned off !!!");

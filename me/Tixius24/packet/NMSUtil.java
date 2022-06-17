@@ -163,6 +163,8 @@ public class NMSUtil {
 			}
 			
 			return "ac";
+		case 19:
+			return "aa";
 		default:
 			return "PARTICLE_TYPE";
 		}
