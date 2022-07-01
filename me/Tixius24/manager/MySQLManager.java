@@ -141,7 +141,7 @@ public class MySQLManager {
 
 			while (result.next()) {		
 				if (result.getString("Status").equals("Active")) {
-					plugin.getStream().getBlockStream().put(result.getString("Spawner"), plugin.getAPManager().createObject(result.getString("World"), 
+					plugin.getStream().getBlockStream().put(result.getString("Spawner"), plugin.getAdvanceManager().createObject(result.getString("World"), 
 							result.getString("Particle"), result.getDouble("X"), result.getDouble("Y"), result.getDouble("Z")));
 				}
 			}

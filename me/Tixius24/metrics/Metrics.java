@@ -47,6 +47,7 @@ public class Metrics {
 	private final int pluginId;
 	private final List<CustomChart> charts = new ArrayList<>();
 
+	@SuppressWarnings("deprecation")
 	public Metrics(Plugin plugin, int pluginId) {
 		if (plugin == null) {
 			throw new IllegalArgumentException("Plugin cannot be null!");
@@ -186,6 +187,7 @@ public class Metrics {
 		return data;
 	}
 
+	@SuppressWarnings("deprecation")
 	private void submitData() {
 		final JsonObject data = getServerData();
 

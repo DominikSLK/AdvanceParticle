@@ -5,11 +5,13 @@
 PARTICLES:
   EXPLOSION_NORMAL: true
   EXPLOSION_LARGE: true
+  EXPLOSION_HUGE: true
   FIREWORK_SPARK: true
   WATER_SPLASH: true
   WATER_WAKE: true
   DEPTH_SUSPEND: true
   CRIT: true
+  CRIT_MAGIC: true
   SMOKE_NORMAL: true
   SMOKE_LARGE: true
   SPELL: true
@@ -27,11 +29,18 @@ PARTICLES:
   ENCHANT_TABLE: true
   FLAME: true
   LAVA: true
+  FOOTSTEP: true
   CLOUD: true
+  REDSTONE: true
   SNOWBALL: true
+  SNOW_SHOVEL: true
   SLIME: true
   HEART: true
-  BARRIER: true
+  WATER_DROP: true
+  DRAGON_BREATH: true
+  END_ROD: true
+  DAMAGE_INDICATOR: true
+  SWEEP_ATTACK: true
 #
 # MySQL features
 # If is MySQL enable plugin save player and particles data to MySQL, local database system is disable

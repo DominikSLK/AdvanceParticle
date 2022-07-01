@@ -6,12 +6,12 @@ import org.bukkit.entity.Player;
 
 import me.Tixius24.AdvanceParticle;
 import me.Tixius24.object.BlockObject;
-import me.Tixius24.object.ParticleObject;
+import me.Tixius24.object.EnumParticleObject;
 
-public class APManager {
+public class AdvanceManager {
 	private AdvanceParticle plugin;
 
-	public APManager(AdvanceParticle pl) {
+	public AdvanceManager(AdvanceParticle pl) {
 		plugin = pl;
 	}
 
@@ -77,12 +77,12 @@ public class APManager {
 		BlockObject object = plugin.getStream().getBlockStream().get(spawner);
 		p.sendMessage(" ");
 		p.sendMessage("§7Spawner Data:");	
-		p.sendMessage("§8> §7Spawner Name: §a" + spawner);
-		p.sendMessage("§8> §7World: §a" + object.getWorld());
-		p.sendMessage("§8> §7Particle: §a" + object.getParticle());
-		p.sendMessage("§8> §7X: §a" + object.getX());
-		p.sendMessage("§8> §7Y: §a" + object.getY());
-		p.sendMessage("§8> §7Z: §a" + object.getZ());
+		p.sendMessage("§8> §7Spawner Name: §9" + spawner);
+		p.sendMessage("§8> §7World: §9" + object.getWorld());
+		p.sendMessage("§8> §7Particle: §9" + object.getParticle());
+		p.sendMessage("§8> §7X: §9" + object.getX());
+		p.sendMessage("§8> §7Y: §9" + object.getY());
+		p.sendMessage("§8> §7Z: §9" + object.getZ());
 		p.sendMessage(" ");
 	}
 
@@ -114,15 +114,19 @@ public class APManager {
 	}
 
 	public boolean checkAllowUseParticle(String particle) {
-		if (plugin.getVersionNumger() < 7) {
-			if (particle.equalsIgnoreCase("water_wake") || particle.equalsIgnoreCase("barrier")) { 
+		if (EnumParticleObject.valueOf(particle).get().equalsIgnoreCase("-----")) { 
+			return false;
+		}
+		
+		if (plugin.getVersionNumger() < 9) {
+			if (particle.equalsIgnoreCase("dragon_breath") || particle.equalsIgnoreCase("end_rod") || particle.equalsIgnoreCase("damage_indicator") || particle.equalsIgnoreCase("sweep_attack")) { 
 				return false;
 			}
 		}
-
-		if (plugin.getVersionNumger() == 7) {
-			if (particle.equalsIgnoreCase("barrier")) { 
-				return false; 
+		
+		if (plugin.getVersionNumger() < 7) {
+			if (particle.equalsIgnoreCase("water_wake")) { 
+				return false;
 			}
 		}
 
@@ -131,7 +135,7 @@ public class APManager {
 
 	public boolean checkExistParticle(String particle , Player p) {
 		try { 
-			if (ParticleObject.valueOf(particle) == null); 
+			if (EnumParticleObject.valueOf(particle) == null); 
 		} catch (IllegalArgumentException ex) { 
 			p.sendMessage(plugin.getMessager().sendMessage("ERROR_PARTICLE")); 
 			return false; 
@@ -147,9 +151,9 @@ public class APManager {
 	}
 
 	public void listParticle(Player p) {
-		p.sendMessage("§8=-=-=-=-=-=-=-> §aList of Particles §8<-=-=-=-=-=-=-=");
+		p.sendMessage("§8=-=-=-=-=-=-=-> §9List of Particles §8<-=-=-=-=-=-=-=");
 
-		for (ParticleObject m : ParticleObject.values()) {
+		for (EnumParticleObject m : EnumParticleObject.values()) {
 			p.sendMessage("§7> §b" + m.toString());
 		}
 
@@ -157,7 +161,7 @@ public class APManager {
 	}
 
 	public void listSpawnerParticles(Player p) {
-		p.sendMessage("§8=-=-=-=-=-=-> §aList of Spawners §8<-=-=-=-=-=-=");
+		p.sendMessage("§8=-=-=-=-=-=-> §9List of Spawners §8<-=-=-=-=-=-=");
 
 		for (String name : plugin.getStream().getBlockStream().keySet()) {
 			p.sendMessage("§7> §b" + name);

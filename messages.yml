@@ -1,11 +1,11 @@
 #
 # Default message from AdvanceParticle plugin
-PREFIX: "&8[&cAP&8]"
+PREFIX: "&8[&9AP&8]"
 CONSOLE: "&4This action is not allowed from console"
 NOPERM: "&cYou don't have permission to this action"
 #
 #
-ACTIVE_PARTICLE_PLAYER: "%prefix% &7You have activated particle &a%particle%"
+ACTIVE_PARTICLE_PLAYER: "%prefix% &7You have activated particle: &a%particle%"
 REMOVE_PARTICLE_PLAYER: "%prefix% &7Particle effect succesfully removed!"
 ALREADY_PARTICLE_PLAYER: "%prefix% &cYou have already activated particle!"
 #

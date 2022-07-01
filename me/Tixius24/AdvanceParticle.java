@@ -15,11 +15,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import me.Tixius24.manager.FileManager;
 import me.Tixius24.manager.MySQLManager;
-import me.Tixius24.manager.APManager;
+import me.Tixius24.manager.AdvanceManager;
 import me.Tixius24.manager.StreamManager;
 import me.Tixius24.metrics.Metrics;
 import me.Tixius24.object.BlockObject;
-import me.Tixius24.packet.NMSUtil;
+import me.Tixius24.packet.Reflection;
 import me.Tixius24.packet.PacketPlayOutWorldParticles;
 
 public class AdvanceParticle extends JavaPlugin implements Listener {
@@ -29,7 +29,7 @@ public class AdvanceParticle extends JavaPlugin implements Listener {
 	private Messages message;
 	private StreamManager stream;
 	private MySQLManager mysql;
-	private APManager ap_manager;
+	private AdvanceManager ap_manager;
 
 	private String version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
 	private int versionNumber = Integer.parseInt(version.split("_")[1]);
@@ -55,7 +55,7 @@ public class AdvanceParticle extends JavaPlugin implements Listener {
 		useMySQL = manager.getPluginConfig().getBoolean("MySQL.enable");
 		stream = new StreamManager(this);
 		message = new Messages(this);
-		ap_manager = new APManager(this);
+		ap_manager = new AdvanceManager(this);
 
 		if (versionNumber > 8 || version.equals("v1_8_R2") || version.equals("v1_8_R3")) 
 			new Metrics(this, 7949);
@@ -91,7 +91,7 @@ public class AdvanceParticle extends JavaPlugin implements Listener {
 		return plugin;
 	}
 
-	public APManager getAPManager() {
+	public AdvanceManager getAdvanceManager() {
 		return ap_manager;
 	}
 
@@ -192,7 +192,7 @@ public class AdvanceParticle extends JavaPlugin implements Listener {
 						for (Player p : players.keySet()) {
 							for (Player pl : p.getWorld().getPlayers()) {
 								Location loc = p.getLocation();
-								NMSUtil.sendPacket(pl, PacketPlayOutWorldParticles.createPacket(players.get(p), loc.getX(), loc.getY(), loc.getZ()));
+								Reflection.sendPacket(pl, PacketPlayOutWorldParticles.createPacket(players.get(p), loc.getX(), loc.getY(), loc.getZ()));
 							}
 						}
 
@@ -201,7 +201,7 @@ public class AdvanceParticle extends JavaPlugin implements Listener {
 							Object packet = PacketPlayOutWorldParticles.createPacket(object.getParticle(), object.getX(), object.getY(), object.getZ());
 
 							for (Player p : Bukkit.getWorld(object.getWorld()).getPlayers()) {
-								NMSUtil.sendPacket(p, packet);
+								Reflection.sendPacket(p, packet);
 							}
 						}
 

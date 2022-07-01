@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 
 import me.Tixius24.AdvanceParticle;
 
-public class NMSUtil {
+public class Reflection {
 
 	private static AdvanceParticle plugin = AdvanceParticle.getInstance();
 
@@ -87,7 +87,7 @@ public class NMSUtil {
 			return particleName;
 
 		if (plugin.getVersionNumger() < 13) {
-			Class<?> c = NMSUtil.getNMSClass("EnumParticle");
+			Class<?> c = Reflection.getNMSClass("EnumParticle");
 
 			for (Object object : c.getEnumConstants()) {
 				if (object.toString().equals(particleName)) {
@@ -106,7 +106,7 @@ public class NMSUtil {
 			Class<?> c = null;
 
 			if (plugin.getServerVersion().equals("v1_13_R1")) {
-				c = NMSUtil.getNMSClass("Particle");
+				c = Reflection.getNMSClass("Particle");
 
 				Object object = c.getDeclaredField("REGISTRY").get(null);
 				Method get = object.getClass().getMethod("get", Object.class);
