@@ -76,19 +76,19 @@ public class AdvanceManager {
 	public void getSpawnerInfo(Player p, String spawner) {
 		BlockObject object = plugin.getStream().getBlockStream().get(spawner);
 		p.sendMessage(" ");
-		p.sendMessage("ง7Spawner Data:");	
-		p.sendMessage("ง8> ง7Spawner Name: ง9" + spawner);
-		p.sendMessage("ง8> ง7World: ง9" + object.getWorld());
-		p.sendMessage("ง8> ง7Particle: ง9" + object.getParticle());
-		p.sendMessage("ง8> ง7X: ง9" + object.getX());
-		p.sendMessage("ง8> ง7Y: ง9" + object.getY());
-		p.sendMessage("ง8> ง7Z: ง9" + object.getZ());
+		p.sendMessage("ยง7Spawner Data:");	
+		p.sendMessage("ยง8> ยง7Spawner Name: ยง9" + spawner);
+		p.sendMessage("ยง8> ยง7World: ยง9" + object.getWorld());
+		p.sendMessage("ยง8> ยง7Particle: ยง9" + object.getParticle());
+		p.sendMessage("ยง8> ยง7X: ยง9" + object.getX());
+		p.sendMessage("ยง8> ยง7Y: ยง9" + object.getY());
+		p.sendMessage("ยง8> ยง7Z: ยง9" + object.getZ());
 		p.sendMessage(" ");
 	}
 
 	public boolean checkBlockPerm(Player p, String perm) {
 		if (!p.hasPermission("advanceparticle.block.*") && !p.hasPermission("advanceparticle.block." + perm.toLowerCase())) { 
-			p.sendMessage(plugin.getMessager().sendMessage("NOPERM")); 
+			p.sendMessage(plugin.getManager().sendMessage("NOPERM")); 
 			return false; 
 		}
 
@@ -97,7 +97,7 @@ public class AdvanceManager {
 
 	public boolean checkPlayerPerm(Player p, String perm) {
 		if (!p.hasPermission("advanceparticle.player.*") && !p.hasPermission("advanceparticle.player." + perm.toLowerCase())) { 
-			p.sendMessage(plugin.getMessager().sendMessage("NOPERM")); 
+			p.sendMessage(plugin.getManager().sendMessage("NOPERM")); 
 			return false; 
 		}
 
@@ -106,7 +106,7 @@ public class AdvanceManager {
 
 	public boolean checkEnableParticle(Player p, String particle) {
 		if (!plugin.getManager().getPluginConfig().getBoolean("PARTICLES." + particle)) { 
-			p.sendMessage(plugin.getMessager().sendMessage("ERROR_PARTICLE_USE")); 
+			p.sendMessage(plugin.getManager().sendMessage("ERROR_PARTICLE_USE")); 
 			return false; 
 		}
 
@@ -117,13 +117,13 @@ public class AdvanceManager {
 		if (EnumParticleObject.valueOf(particle).get().equalsIgnoreCase("-----")) { 
 			return false;
 		}
-		
+
 		if (plugin.getVersionNumger() < 9) {
 			if (particle.equalsIgnoreCase("dragon_breath") || particle.equalsIgnoreCase("end_rod") || particle.equalsIgnoreCase("damage_indicator") || particle.equalsIgnoreCase("sweep_attack")) { 
 				return false;
 			}
 		}
-		
+
 		if (plugin.getVersionNumger() < 7) {
 			if (particle.equalsIgnoreCase("water_wake")) { 
 				return false;
@@ -137,7 +137,7 @@ public class AdvanceManager {
 		try { 
 			if (EnumParticleObject.valueOf(particle) == null); 
 		} catch (IllegalArgumentException ex) { 
-			p.sendMessage(plugin.getMessager().sendMessage("ERROR_PARTICLE")); 
+			p.sendMessage(plugin.getManager().sendMessage("ERROR_PARTICLE")); 
 			return false; 
 		}
 
@@ -151,23 +151,23 @@ public class AdvanceManager {
 	}
 
 	public void listParticle(Player p) {
-		p.sendMessage("ง8=-=-=-=-=-=-=-> ง9List of Particles ง8<-=-=-=-=-=-=-=");
+		p.sendMessage("ยง8=-=-=-=-=-=-=-> ยง9List of Particles ยง8<-=-=-=-=-=-=-=");
 
 		for (EnumParticleObject m : EnumParticleObject.values()) {
-			p.sendMessage("ง7> งb" + m.toString());
+			p.sendMessage("ยง7> ยงb" + m.toString());
 		}
 
-		p.sendMessage("ง8=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
+		p.sendMessage("ยง8=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
 	}
 
 	public void listSpawnerParticles(Player p) {
-		p.sendMessage("ง8=-=-=-=-=-=-> ง9List of Spawners ง8<-=-=-=-=-=-=");
+		p.sendMessage("ยง8=-=-=-=-=-=-> ยง9List of Spawners ยง8<-=-=-=-=-=-=");
 
 		for (String name : plugin.getStream().getBlockStream().keySet()) {
-			p.sendMessage("ง7> งb" + name);
+			p.sendMessage("ยง7> ยงb" + name);
 		}
 
-		p.sendMessage("ง8=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
+		p.sendMessage("ยง8=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
 	}
 
 	public BlockObject createObject(String world, String particle, double x, double y, double z) {

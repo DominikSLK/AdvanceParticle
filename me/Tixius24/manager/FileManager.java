@@ -3,6 +3,9 @@ package me.Tixius24.manager;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.HashMap;
+
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import me.Tixius24.AdvanceParticle;
 
@@ -12,12 +15,23 @@ public class FileManager {
 	private YamlConfiguration c;
 	private File mf;
 	private YamlConfiguration m;
+	
+	private HashMap<String, String> messages = new HashMap<String, String>();
 
 	public FileManager(AdvanceParticle pl) {
 		plugin = pl;
 	}
+	
+	public void loadMessageFile() {
+		messages.clear();
+		YamlConfiguration mes = plugin.getManager().getPluginMessages();
 
-	public void loadPluginFile() {
+		for (String key : mes.getKeys(false)) {
+			messages.put(key, mes.getString(key));
+		}
+	}
+
+	public void loadPluginFiles() {
 		File data = new File(plugin.getDataFolder(), "/data/");
 
 		if (!data.exists()) 
@@ -49,6 +63,10 @@ public class FileManager {
 
 	public YamlConfiguration getPluginMessages() {
 		return m;
+	}
+
+	public String sendMessage(String key) {
+		return ChatColor.stripColor(messages.get(key).replace("%prefix%", messages.get("PREFIX"))).replace("&", "§");
 	}
 
 }

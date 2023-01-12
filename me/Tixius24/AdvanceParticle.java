@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -26,7 +27,6 @@ public class AdvanceParticle extends JavaPlugin implements Listener {
 	private HashMap<Player, String> players = new HashMap<Player, String>();
 
 	private FileManager manager;
-	private Messages message;
 	private StreamManager stream;
 	private MySQLManager mysql;
 	private AdvanceManager ap_manager;
@@ -39,22 +39,24 @@ public class AdvanceParticle extends JavaPlugin implements Listener {
 
 	public void onEnable() {
 		plugin = this;
+		
+		if (getVersionNumger() == 19) {
+			if (!version.equals("v1_19_R1") && !version.equals("v1_19_R2")) {
+				Action_Unsapported_Version();
+				return;
+			}
+		}
 
 		if (getVersionNumger() < 5 || getVersionNumger() > 19) {
-			consoleLog("§8=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
-			consoleLog("§c> Server version is not supported!!");
-			consoleLog("§c> AdvanceParticle plugin is turned off !!!");
-			consoleLog("§8=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
-			Bukkit.getPluginManager().disablePlugin(this);
+			Action_Unsapported_Version();
 			return;
 		}
 
-
 		manager = new FileManager(this);
-		manager.loadPluginFile();
+		manager.loadPluginFiles();
+		manager.loadMessageFile();
 		useMySQL = manager.getPluginConfig().getBoolean("MySQL.enable");
 		stream = new StreamManager(this);
-		message = new Messages(this);
 		ap_manager = new AdvanceManager(this);
 
 		if (versionNumber > 8 || version.equals("v1_8_R2") || version.equals("v1_8_R3")) 
@@ -63,16 +65,21 @@ public class AdvanceParticle extends JavaPlugin implements Listener {
 		Bukkit.getPluginManager().registerEvents(this, this);
 		getCommand("advanceparticle").setExecutor(new Commands(this));
 
-		mysql = new MySQLManager(this, manager.getPluginConfig().getString("MySQL.host"), manager.getPluginConfig().getString("MySQL.database"), manager.getPluginConfig().getString("MySQL.username")
-				, manager.getPluginConfig().getString("MySQL.password"), manager.getPluginConfig().getString("MySQL.table"), manager.getPluginConfig().getInt("MySQL.port"));
+		mysql = new MySQLManager(this, manager.getPluginConfig().getString("MySQL.host"), 
+				manager.getPluginConfig().getString("MySQL.database"),
+				manager.getPluginConfig().getString("MySQL.username"), 
+				manager.getPluginConfig().getString("MySQL.password"), 
+				manager.getPluginConfig().getString("MySQL.table"), 
+				manager.getPluginConfig().getInt("MySQL.port"));
 
-		loadStartTUP();
+		loadDataPluginStart();
 		updateParticle();
 
-		consoleLog("§8=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
-		consoleLog("§a> AdvanceParticle plugin has been successfully loaded!");
-		consoleLog("§a> Server version:§c " + version.replace("v", "") + " §aPlugin version §c" + getDescription().getVersion());
-		consoleLog("§8=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
+		consoleLog("Â§8=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
+		consoleLog("Â§a> AdvanceParticle plugin has been successfully loaded!");
+		consoleLog("Â§a> Server version:Â§9 " + version.replace("v", "") + " Â§aPlugin version Â§9" + getDescription().getVersion());
+		consoleLog("Â§8=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
+		System.out.println("Server version: " + version);
 	}
 
 	public void onDisable() {
@@ -82,9 +89,17 @@ public class AdvanceParticle extends JavaPlugin implements Listener {
 			}
 		}
 
-		consoleLog("§8=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
-		consoleLog("§a> AdvanceParticle plugin has been successfully disable!");
-		consoleLog("§8=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
+		consoleLog("Â§8=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
+		consoleLog("Â§a> AdvanceParticle plugin has been successfully disable!");
+		consoleLog("Â§8=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
+	}
+	
+	private void Action_Unsapported_Version() {
+		consoleLog("Â§8=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
+		consoleLog("Â§c> Your server version is not supported!!");
+		consoleLog("Â§c> AdvanceParticle plugin is turned off !!!");
+		consoleLog("Â§8=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
+		Bukkit.getPluginManager().disablePlugin(this);
 	}
 
 	public static AdvanceParticle getInstance() {
@@ -107,10 +122,6 @@ public class AdvanceParticle extends JavaPlugin implements Listener {
 		return stream;
 	}
 
-	public Messages getMessager() {
-		return message;
-	}
-
 	public MySQLManager getMySQL() {
 		return mysql;
 	}
@@ -128,7 +139,7 @@ public class AdvanceParticle extends JavaPlugin implements Listener {
 	}
 
 	@EventHandler
-	public void onJoin(PlayerJoinEvent e) {
+	public void playerConnect(PlayerJoinEvent e) {
 		Player p = e.getPlayer();
 
 		if (p == null) {
@@ -151,7 +162,7 @@ public class AdvanceParticle extends JavaPlugin implements Listener {
 	}
 
 	@EventHandler
-	public void onQuit(PlayerQuitEvent e) {
+	public void playerDisconnect(PlayerQuitEvent e) {
 		Player p = e.getPlayer();
 
 		if (p == null) {
@@ -163,7 +174,7 @@ public class AdvanceParticle extends JavaPlugin implements Listener {
 		}
 	}
 
-	private void loadStartTUP() {
+	private void loadDataPluginStart() {
 		if (useMySQL) {
 			int lastID = getMySQL().getLastTableID();
 
@@ -190,9 +201,18 @@ public class AdvanceParticle extends JavaPlugin implements Listener {
 				while (true) {
 					try {
 						for (Player p : players.keySet()) {
-							for (Player pl : p.getWorld().getPlayers()) {
-								Location loc = p.getLocation();
-								Reflection.sendPacket(pl, PacketPlayOutWorldParticles.createPacket(players.get(p), loc.getX(), loc.getY(), loc.getZ()));
+							if (getVersionNumger() > 7) {
+								if (p.getGameMode() != GameMode.SPECTATOR) {
+									for (Player pl : p.getWorld().getPlayers()) {
+										Location loc = p.getLocation();
+										Reflection.sendPacket(pl, PacketPlayOutWorldParticles.createPacket(players.get(p), loc.getX(), loc.getY(), loc.getZ()));
+									}
+								}
+							} else {
+								for (Player pl : p.getWorld().getPlayers()) {
+									Location loc = p.getLocation();
+									Reflection.sendPacket(pl, PacketPlayOutWorldParticles.createPacket(players.get(p), loc.getX(), loc.getY(), loc.getZ()));
+								}
 							}
 						}
 
@@ -212,6 +232,6 @@ public class AdvanceParticle extends JavaPlugin implements Listener {
 			}
 
 		}).start();
-
 	}
+	
 }

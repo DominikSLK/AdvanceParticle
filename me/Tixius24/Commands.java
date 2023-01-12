@@ -17,7 +17,7 @@ public class Commands implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 
 		if (!(sender instanceof Player)) {
-			sender.sendMessage(plugin.getMessager().sendMessage("CONSOLE"));			
+			sender.sendMessage(plugin.getManager().sendMessage("CONSOLE"));			
 			return true;
 		}
 
@@ -34,7 +34,7 @@ public class Commands implements CommandExecutor {
 			if (args[0].equalsIgnoreCase("help")) {
 
 				if (!p.hasPermission("advanceparticle.help")) { 
-					p.sendMessage(plugin.getMessager().sendMessage("NOPERM")); 
+					p.sendMessage(plugin.getManager().sendMessage("NOPERM")); 
 					return true; 
 				}
 
@@ -45,11 +45,11 @@ public class Commands implements CommandExecutor {
 			if (args[0].equalsIgnoreCase("reload")) {
 
 				if (p.hasPermission("advanceparticle.reload")) { 
-					plugin.getManager().loadPluginFile();
-					plugin.getMessager().loadPluginMessage();
-					p.sendMessage("งaPlugin config.yml and messages.yml files has been reloaded!");
+					plugin.getManager().loadPluginFiles();
+					plugin.getManager().loadMessageFile();
+					p.sendMessage("ยงaPlugin config.yml and messages.yml files has been reloaded!");
 				} else 
-					p.sendMessage(plugin.getMessager().sendMessage("NOPERM"));
+					p.sendMessage(plugin.getManager().sendMessage("NOPERM"));
 
 				return true; 
 			}
@@ -59,7 +59,7 @@ public class Commands implements CommandExecutor {
 				if (p.hasPermission("advanceparticle.particle")) { 
 					plugin.getAdvanceManager().listParticle(p);
 				} else 
-					p.sendMessage(plugin.getMessager().sendMessage("NOPERM"));
+					p.sendMessage(plugin.getManager().sendMessage("NOPERM"));
 
 				return true;
 			}
@@ -69,7 +69,7 @@ public class Commands implements CommandExecutor {
 				if (p.hasPermission("advanceparticle.spawner")) { 
 					plugin.getAdvanceManager().listSpawnerParticles(p);
 				} else 
-					p.sendMessage(plugin.getMessager().sendMessage("NOPERM")); 
+					p.sendMessage(plugin.getManager().sendMessage("NOPERM")); 
 
 				return true;
 			}
@@ -77,10 +77,10 @@ public class Commands implements CommandExecutor {
 			if (args[0].equalsIgnoreCase("remove")) {
 
 				if (plugin.getPlayers().containsKey(p)) { 
-					p.sendMessage(plugin.getMessager().sendMessage("REMOVE_PARTICLE_PLAYER"));
+					p.sendMessage(plugin.getManager().sendMessage("REMOVE_PARTICLE_PLAYER"));
 					plugin.getAdvanceManager().removePlayerData(p);
 				} else 
-					p.sendMessage(plugin.getMessager().sendMessage("ERROR_PARTICLE_ACTIVE")); 
+					p.sendMessage(plugin.getManager().sendMessage("ERROR_PARTICLE_ACTIVE")); 
 
 				return true;
 			}
@@ -105,46 +105,46 @@ public class Commands implements CommandExecutor {
 				}
 
 				if (plugin.getPlayers().containsKey(p)) { 
-					p.sendMessage(plugin.getMessager().sendMessage("ALREADY_PARTICLE_PLAYER")); 
+					p.sendMessage(plugin.getManager().sendMessage("ALREADY_PARTICLE_PLAYER")); 
 					return true; 
 				}
 
 				if (!plugin.getAdvanceManager().checkAllowUseParticle(particle)) {
-					p.sendMessage(plugin.getMessager().sendMessage("ERROR_USE_SERVER_VERSION"));
+					p.sendMessage(plugin.getManager().sendMessage("ERROR_USE_SERVER_VERSION"));
 					return true;
 				}
 
 				plugin.getAdvanceManager().savePlayerData(p, particle);
-				p.sendMessage(plugin.getMessager().sendMessage("ACTIVE_PARTICLE_PLAYER").replace("%particle%", particle));
+				p.sendMessage(plugin.getManager().sendMessage("ACTIVE_PARTICLE_PLAYER").replace("%particle%", particle));
 				return true;
 			}
 
 			if (args[0].equalsIgnoreCase("delete")) {
 
 				if (!p.hasPermission("advanceparticle.delete")) { 
-					p.sendMessage(plugin.getMessager().sendMessage("NOPERM")); 
+					p.sendMessage(plugin.getManager().sendMessage("NOPERM")); 
 					return true; 
 				}
 
 				if (!plugin.getStream().getBlockStream().containsKey(args[1])) { 
-					p.sendMessage(plugin.getMessager().sendMessage("ERROR_BLOCK")); 
+					p.sendMessage(plugin.getManager().sendMessage("ERROR_BLOCK")); 
 					return true; 
 				}
 
 				plugin.getAdvanceManager().deleteBlockData(args[1]);
-				p.sendMessage(plugin.getMessager().sendMessage("BLOCK_PARTICLE_DELETE"));
+				p.sendMessage(plugin.getManager().sendMessage("BLOCK_PARTICLE_DELETE"));
 				return true;
 			}
 
 			if (args[0].equalsIgnoreCase("info")) {
 
 				if (!p.hasPermission("advanceparticle.info")) { 
-					p.sendMessage(plugin.getMessager().sendMessage("NOPERM")); 
+					p.sendMessage(plugin.getManager().sendMessage("NOPERM")); 
 					return true; 
 				}
 
 				if (!plugin.getStream().getBlockStream().containsKey(args[1])) { 
-					p.sendMessage(plugin.getMessager().sendMessage("ERROR_BLOCK")); 
+					p.sendMessage(plugin.getManager().sendMessage("ERROR_BLOCK")); 
 					return true; 
 				}
 
@@ -155,17 +155,17 @@ public class Commands implements CommandExecutor {
 			if (args[0].equalsIgnoreCase("tp")) {
 
 				if (!p.hasPermission("advanceparticle.teleport")) { 
-					p.sendMessage(plugin.getMessager().sendMessage("NOPERM")); 
+					p.sendMessage(plugin.getManager().sendMessage("NOPERM")); 
 					return true; 
 				}
 
 				if (!plugin.getStream().getBlockStream().containsKey(args[1])) { 
-					p.sendMessage(plugin.getMessager().sendMessage("ERROR_BLOCK")); 
+					p.sendMessage(plugin.getManager().sendMessage("ERROR_BLOCK")); 
 					return true; 
 				}
 
 				plugin.getAdvanceManager().teleportToSpawner(p, args[1]);
-				p.sendMessage(plugin.getMessager().sendMessage("BLOCK_PARTICLE_TP"));
+				p.sendMessage(plugin.getManager().sendMessage("BLOCK_PARTICLE_TP"));
 				return true;
 			}
 
@@ -184,7 +184,7 @@ public class Commands implements CommandExecutor {
 			}
 
 			if (plugin.getStream().getBlockStream().containsKey(args[1])) { 
-				p.sendMessage(plugin.getMessager().sendMessage("ALREADY_BLOCK_NAME")); 
+				p.sendMessage(plugin.getManager().sendMessage("ALREADY_BLOCK_NAME")); 
 				return true; 
 			}
 
@@ -195,19 +195,19 @@ public class Commands implements CommandExecutor {
 				}
 
 				if (!plugin.getAdvanceManager().checkAllowUseParticle(particle)) {
-					p.sendMessage(plugin.getMessager().sendMessage("ERROR_USE_SERVER_VERSION"));
+					p.sendMessage(plugin.getManager().sendMessage("ERROR_USE_SERVER_VERSION"));
 					return true;
 				}
 
 				plugin.getAdvanceManager().saveBlockData(p, particle, args[1], p.getLocation().getX(), p.getLocation().getY() - 0.5, p.getLocation().getZ());
-				p.sendMessage(plugin.getMessager().sendMessage("BLOCK_PARTICLE_SET"));
+				p.sendMessage(plugin.getManager().sendMessage("BLOCK_PARTICLE_SET"));
 				return true;
 			}
 
 			if (args[0].equalsIgnoreCase("setlooking")) {
 
 				if (plugin.getVersionNumger() < 8) {
-					p.sendMessage(plugin.getMessager().sendMessage("ERROR_USE_SERVER_COMMAND"));
+					p.sendMessage(plugin.getManager().sendMessage("ERROR_USE_SERVER_COMMAND"));
 					return true;
 				}
 
@@ -216,13 +216,13 @@ public class Commands implements CommandExecutor {
 				}
 
 				if (!plugin.getAdvanceManager().checkAllowUseParticle(particle)) {
-					p.sendMessage(plugin.getMessager().sendMessage("ERROR_USE_SERVER_VERSION"));
+					p.sendMessage(plugin.getManager().sendMessage("ERROR_USE_SERVER_VERSION"));
 					return true;
 				}
 
 				Location loc = p.getTargetBlock(null, 50).getLocation();
 				plugin.getAdvanceManager().saveBlockData(p, particle, args[1], loc.getX() + 0.5, loc.getY() + 0.5, loc.getZ() + 0.5);
-				p.sendMessage(plugin.getMessager().sendMessage("BLOCK_PARTICLE_SET"));
+				p.sendMessage(plugin.getManager().sendMessage("BLOCK_PARTICLE_SET"));
 				return true;
 			}
 
@@ -233,36 +233,35 @@ public class Commands implements CommandExecutor {
 	}
 
 	private void sendDefaultHelp(Player p) {
-		p.sendMessage("ง8งl> ง9งlAdvanceParticle ง7plugin by: งcงlTixius24");
-		p.sendMessage("ง8งl> งaงlhttps://www.spigotmc.org/resources/71929/");
-		p.sendMessage("ง8งlง8งl> ง7For more info use ง9งl/ap help");
+		p.sendMessage("ยง8ยงl> ยงcยงlAdvanceParticle ยง7plugin by: ยงcยงlTixius24");
+		p.sendMessage("ยง8ยงl> ยง9ยงlhttps://www.spigotmc.org/resources/71929/");
+		p.sendMessage("ยง8ยงlยง8ยงl> ยง7For more info use ยง9ยงl/ap help");
 	}
 
 	private void sendHelp(Player p) {
-		p.sendMessage("ง8=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
-		p.sendMessage("ง8> ง7Plugin version: ง9" + plugin.getDescription().getVersion() + " ง7Developed by งcTixius24");
-		p.sendMessage("ง8> ง7Commands help:");
-		p.sendMessage("ง8> ");
-		p.sendMessage("ง8> ง9/ap help ง8- ง7Show all commands from plugin");
-		p.sendMessage("ง8> ง9/ap particle ง8- ง7List of the all particles from plugin");
-		p.sendMessage("ง8> ง9/ap add <particle> ง8- ง7Set particle effect on the player!");
-		p.sendMessage("ง8> ง9/ap remove ง8- ง7Remove already activated particle from yourself");
+		p.sendMessage("ยง8=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
+		p.sendMessage("ยง8> ยง7Plugin version: ยงc" + plugin.getDescription().getVersion() + " ยง7Developed by ยงcTixius24");
+		p.sendMessage("ยง8> ยง7Commands help:");
+		p.sendMessage("ยง8> ");
+		p.sendMessage("ยง8> ยง9/ap help ยง8- ยง7Show all commands from plugin");
+		p.sendMessage("ยง8> ยง9/ap particle ยง8- ยง7List of the all particles from plugin");
+		p.sendMessage("ยง8> ยง9/ap add <particle> ยง8- ยง7Set particle effect on the player!");
+		p.sendMessage("ยง8> ยง9/ap remove ยง8- ยง7Remove already activated particle from yourself");
 
 		if (p.hasPermission("advanceparticle.help.admin")) {
-			p.sendMessage("ง8> ");
-			p.sendMessage("ง8> ง7Commands for administrators:");
-			p.sendMessage("ง8> ง9/ap reload ง8- ง7Reload plugin messages.yml and config.yml");
-			p.sendMessage("ง8> ง9/ap spawner ง8- ง7List of the all named particle spawners");
-			p.sendMessage("ง8> ง9/ap set <name> <particle> ง8- ง7Set particle spawner on the block location");
-			p.sendMessage("ง8> ง9/ap setlooking <name> <particle> ง8- ง7Set particle spawner on looking block location");
-			p.sendMessage("ง8> ง9/ap info <spawnerName> ง8- ง7Show more information about the spawner");
-			p.sendMessage("ง8> ง9/ap tp <spawnerName> ง8- ง7Teleport on the spawner location");
-			p.sendMessage("ง8> ง9/ap delete <spawnerName> ง8- ง7Delete existed particle spawner from list");
+			p.sendMessage("ยง8> ");
+			p.sendMessage("ยง8> ยง7Commands for administrators:");
+			p.sendMessage("ยง8> ยง9/ap reload ยง8- ยง7Reload plugin messages.yml and config.yml");
+			p.sendMessage("ยง8> ยง9/ap spawner ยง8- ยง7List of the all named particle spawners");
+			p.sendMessage("ยง8> ยง9/ap set <name> <particle> ยง8- ยง7Set particle spawner on the block location");
+			p.sendMessage("ยง8> ยง9/ap setlooking <name> <particle> ยง8- ยง7Set particle spawner on looking block location");
+			p.sendMessage("ยง8> ยง9/ap info <spawnerName> ยง8- ยง7Show more information about the spawner");
+			p.sendMessage("ยง8> ยง9/ap tp <spawnerName> ยง8- ยง7Teleport on the spawner location");
+			p.sendMessage("ยง8> ยง9/ap delete <spawnerName> ยง8- ยง7Delete existed particle spawner from list");
 		}
 
-		p.sendMessage("ง8> ");
-		p.sendMessage("ง8> ง7Plugin website: งchttps://www.spigotmc.org/resources/71929/");
-		p.sendMessage("ง8=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
+		p.sendMessage("ยง8> ");
+		p.sendMessage("ยง8=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
 	}
 
 }

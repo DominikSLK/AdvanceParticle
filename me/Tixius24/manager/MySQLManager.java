@@ -53,10 +53,10 @@ public class MySQLManager {
 
 			return connection; 
 		} catch (SQLException e) { 
-			plugin.consoleLog("§c[AP] Storage could not connect to MySQL because: " + e.getMessage());
+			plugin.consoleLog("Â§c[AP] Storage could not connect to MySQL because: " + e.getMessage());
 
 		} catch (ClassNotFoundException e) {
-			plugin.consoleLog("§c[AP] " + driver + " not found!");
+			plugin.consoleLog("Â§c[AP] " + driver + " not found!");
 
 		} catch (Exception e) { 
 			System.out.println(e.getMessage()); 
@@ -211,7 +211,7 @@ public class MySQLManager {
 
 			} catch (SQLException e) {
 				if (retry) {
-					plugin.consoleLog("§c[AP] Retrying query...");
+					plugin.consoleLog("Â§c[AP] Retrying query...");
 
 					Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
 
@@ -221,7 +221,7 @@ public class MySQLManager {
 
 					}, 20);
 
-					plugin.consoleLog("§a[AP] Please retry your user action again");
+					plugin.consoleLog("Â§a[AP] Please retry your user action again");
 				}
 			}
 
@@ -235,7 +235,7 @@ public class MySQLManager {
 	}
 
 	private void databaseTable() {
-		plugin.consoleLog("§a[AP] Succesfully loading storage provider... MySQL");
+		plugin.consoleLog("Â§a[AP] Succesfully loading storage provider... MySQL");
 
 		query("CREATE TABLE IF NOT EXISTS " + table + "players" + " (Player varchar(16) NOT NULL, " 
 				+ "Particle varchar(32) NOT NULL, Date varchar(32) NOT NULL," + "UNIQUE KEY Player (Player) ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;", true);
@@ -244,7 +244,7 @@ public class MySQLManager {
 				+ "X varchar(16) NOT NULL, " + "Y varchar(16) NOT NULL, Z varchar(16) NOT NULL, World varchar(32) NOT NULL, Status varchar(16) NOT NULL, "
 				+ "Date varchar(32) NOT NULL," + "UNIQUE KEY ID (ID) ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;", true);
 
-		plugin.consoleLog("§a[AP] Succesfully loading MySQL database table!");
+		plugin.consoleLog("Â§a[AP] Succesfully loading MySQL database table!");
 	}
 
 	public void closeConnection() {
@@ -252,7 +252,7 @@ public class MySQLManager {
 
 			if (!getConnection().isClosed()) {
 				getConnection().close();
-				plugin.consoleLog("§a[AP] Succesfully closing storage provider... MySQL");
+				plugin.consoleLog("Â§a[AP] Succesfully closing storage provider... MySQL");
 			}
 		} catch (SQLException ex) {
 			ex.printStackTrace();

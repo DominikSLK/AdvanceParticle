@@ -113,7 +113,7 @@ public class Reflection {
 				return get.invoke(object, key);
 			}
 
-			c = getIRegistryClass("IRegistry");
+			c = getIRegistryClass();
 
 			Object object = c.getDeclaredField(getIRegistryParam(plugin.getVersionNumger())).get(null);
 			Method gets = object.getClass().getMethod(plugin.getVersionNumger() > 17 ? "a" : "get", cls);
@@ -139,13 +139,17 @@ public class Reflection {
 		return null;
 	}
 
-	private static Class<?> getIRegistryClass(String className) {
+	private static Class<?> getIRegistryClass() {
 		try {
 			if (plugin.getVersionNumger() > 16) {
-				return Class.forName("net.minecraft.core." + className);
+				if (plugin.getServerVersion().equals("v1_19_R2")) {
+					return Class.forName("net.minecraft.core.registries.BuiltInRegistries");
+				}
+				
+				return Class.forName("net.minecraft.core.IRegistry");
 			}
 
-			return getNMSClass(className);
+			return getNMSClass("IRegistry");
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -164,6 +168,9 @@ public class Reflection {
 			
 			return "ac";
 		case 19:
+			if (plugin.getServerVersion().equals("v1_19_R2")) {
+				return "k";
+			}
 			return "aa";
 		default:
 			return "PARTICLE_TYPE";
