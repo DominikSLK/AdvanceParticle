@@ -1,12 +1,12 @@
-package me.Tixius24.manager;
+package me.Tixius24.advanceparticle.manager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import me.Tixius24.AdvanceParticle;
-import me.Tixius24.object.BlockObject;
-import me.Tixius24.object.EnumParticleObject;
+import me.Tixius24.advanceparticle.AdvanceParticle;
+import me.Tixius24.advanceparticle.object.BlockObject;
+import me.Tixius24.advanceparticle.object.EnumParticleObject;
 
 public class AdvanceManager {
 	private AdvanceParticle plugin;

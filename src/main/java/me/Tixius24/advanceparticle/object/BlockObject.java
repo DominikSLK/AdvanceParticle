@@ -1,4 +1,4 @@
-package me.Tixius24.object;
+package me.Tixius24.advanceparticle.object;
 
 import java.io.Serializable;
 

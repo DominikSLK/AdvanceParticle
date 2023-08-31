@@ -1,6 +1,6 @@
-package me.Tixius24.object;
+package me.Tixius24.advanceparticle.object;
 
-import me.Tixius24.AdvanceParticle;
+import me.Tixius24.advanceparticle.AdvanceParticle;
 
 public enum EnumParticleObject {
 

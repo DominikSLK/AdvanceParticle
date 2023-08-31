@@ -1,4 +1,4 @@
-package me.Tixius24;
+package me.Tixius24.advanceparticle;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -14,14 +14,14 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import me.Tixius24.manager.FileManager;
-import me.Tixius24.manager.MySQLManager;
-import me.Tixius24.manager.AdvanceManager;
-import me.Tixius24.manager.StreamManager;
-import me.Tixius24.metrics.Metrics;
-import me.Tixius24.object.BlockObject;
-import me.Tixius24.packet.Reflection;
-import me.Tixius24.packet.PacketPlayOutWorldParticles;
+import me.Tixius24.advanceparticle.manager.FileManager;
+import me.Tixius24.advanceparticle.manager.MySQLManager;
+import me.Tixius24.advanceparticle.manager.AdvanceManager;
+import me.Tixius24.advanceparticle.manager.StreamManager;
+import me.Tixius24.advanceparticle.metrics.Metrics;
+import me.Tixius24.advanceparticle.object.BlockObject;
+import me.Tixius24.advanceparticle.packet.Reflection;
+import me.Tixius24.advanceparticle.packet.PacketPlayOutWorldParticles;
 
 public class AdvanceParticle extends JavaPlugin implements Listener {
 	private HashMap<Player, String> players = new HashMap<Player, String>();

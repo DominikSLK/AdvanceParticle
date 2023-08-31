@@ -1,4 +1,4 @@
-package me.Tixius24.metrics;
+package me.Tixius24.advanceparticle.metrics;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;

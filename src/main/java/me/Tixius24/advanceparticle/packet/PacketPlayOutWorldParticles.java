@@ -1,7 +1,7 @@
-package me.Tixius24.packet;
+package me.Tixius24.advanceparticle.packet;
 
-import me.Tixius24.AdvanceParticle;
-import me.Tixius24.object.EnumParticleObject;
+import me.Tixius24.advanceparticle.AdvanceParticle;
+import me.Tixius24.advanceparticle.object.EnumParticleObject;
 
 public class PacketPlayOutWorldParticles {
 

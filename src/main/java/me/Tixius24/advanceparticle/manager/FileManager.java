@@ -1,4 +1,4 @@
-package me.Tixius24.manager;
+package me.Tixius24.advanceparticle.manager;
 
 import java.io.File;
 import java.io.IOException;
@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
-import me.Tixius24.AdvanceParticle;
+import me.Tixius24.advanceparticle.AdvanceParticle;
 
 public class FileManager {
 	private AdvanceParticle plugin;

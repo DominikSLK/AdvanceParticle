@@ -1,4 +1,4 @@
-package me.Tixius24;
+package me.Tixius24.advanceparticle;
 
 import org.bukkit.Location;
 import org.bukkit.command.Command;

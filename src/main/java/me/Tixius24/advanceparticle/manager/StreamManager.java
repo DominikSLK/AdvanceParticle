@@ -1,4 +1,4 @@
-package me.Tixius24.manager;
+package me.Tixius24.advanceparticle.manager;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -6,8 +6,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.HashMap;
 
-import me.Tixius24.AdvanceParticle;
-import me.Tixius24.object.BlockObject;
+import me.Tixius24.advanceparticle.AdvanceParticle;
+import me.Tixius24.advanceparticle.object.BlockObject;
 
 public class StreamManager {
 	private AdvanceParticle plugin;

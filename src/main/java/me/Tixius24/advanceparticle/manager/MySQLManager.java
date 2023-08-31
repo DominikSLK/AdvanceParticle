@@ -1,4 +1,4 @@
-package me.Tixius24.manager;
+package me.Tixius24.advanceparticle.manager;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -9,7 +9,7 @@ import java.sql.Statement;
 
 import org.bukkit.Bukkit;
 
-import me.Tixius24.AdvanceParticle;
+import me.Tixius24.advanceparticle.AdvanceParticle;
 
 public class MySQLManager {
 
