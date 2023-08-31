@@ -44,7 +44,7 @@ public class Reflection {
 	public static void sendPacket(Player p, Object packet) {
 		try {
 			Object nms_player = getPlayer(p);
-			Field field = nms_player.getClass().getField(plugin.getVersionNumger() > 16 ? "b" : "playerConnection");
+			Field field = nms_player.getClass().getField(plugin.getVersionNumger() > 19 ? "c" : (plugin.getVersionNumger() > 16 ? "b" : "playerConnection"));
 			Object con_object = field.get(nms_player);
 
 			Method method = getMethod(con_object.getClass(), plugin.getVersionNumger() > 17 ? "a" : "sendPacket");
@@ -142,7 +142,7 @@ public class Reflection {
 	private static Class<?> getIRegistryClass() {
 		try {
 			if (plugin.getVersionNumger() > 16) {
-				if (plugin.getServerVersion().equals("v1_19_R2") || plugin.getServerVersion().equals("v1_19_R3")) {
+				if (plugin.getServerVersion().equals("v1_19_R2") || plugin.getServerVersion().equals("v1_19_R3") || plugin.getServerVersion().equals("v1_20_R1")) {
 					return Class.forName("net.minecraft.core.registries.BuiltInRegistries");
 				}
 				
@@ -172,6 +172,8 @@ public class Reflection {
 				return "k";
 			}
 			return "aa";
+		case 20:
+			return "k";
 		default:
 			return "PARTICLE_TYPE";
 		}

@@ -233,14 +233,14 @@ public class Commands implements CommandExecutor {
 	}
 
 	private void sendDefaultHelp(Player p) {
-		p.sendMessage("§8§l> §c§lAdvanceParticle §7plugin by: §c§lTixius24");
-		p.sendMessage("§8§l> §9§lhttps://www.spigotmc.org/resources/71929/");
+		p.sendMessage("§8§l> §c§lAdvanceParticle §7plugin by: §c§lTixius24 & DominikSLK");
+		p.sendMessage("§8§l> §9§lhttps://github.com/DominikSLK/AdvanceParticle");
 		p.sendMessage("§8§l§8§l> §7For more info use §9§l/ap help");
 	}
 
 	private void sendHelp(Player p) {
 		p.sendMessage("§8=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
-		p.sendMessage("§8> §7Plugin version: §c" + plugin.getDescription().getVersion() + " §7Developed by §cTixius24");
+		p.sendMessage("§8> §7Plugin version: §c" + plugin.getDescription().getVersion() + " §7Developed by §cTixius24 & DominikSLK");
 		p.sendMessage("§8> §7Commands help:");
 		p.sendMessage("§8> ");
 		p.sendMessage("§8> §9/ap help §8- §7Show all commands from plugin");

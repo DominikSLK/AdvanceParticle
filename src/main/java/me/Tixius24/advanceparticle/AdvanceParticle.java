@@ -40,14 +40,14 @@ public class AdvanceParticle extends JavaPlugin implements Listener {
 	public void onEnable() {
 		plugin = this;
 		
-		if (getVersionNumger() == 19) {
-			if (!version.equals("v1_19_R1") && !version.equals("v1_19_R2") && !version.equals("v1_19_R3")) {
+		if (getVersionNumger() == 20) {
+			if (!version.equals("v1_20_R1")) {
 				Action_Unsapported_Version();
 				return;
 			}
 		}
 
-		if (getVersionNumger() < 5 || getVersionNumger() > 19) {
+		if (getVersionNumger() < 5 || getVersionNumger() > 20) {
 			Action_Unsapported_Version();
 			return;
 		}
@@ -79,7 +79,6 @@ public class AdvanceParticle extends JavaPlugin implements Listener {
 		consoleLog("§a> AdvanceParticle plugin has been successfully loaded!");
 		consoleLog("§a> Server version:§9 " + version.replace("v", "") + " §aPlugin version §9" + getDescription().getVersion());
 		consoleLog("§8=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
-		System.out.println("Server version: " + version);
 	}
 
 	public void onDisable() {

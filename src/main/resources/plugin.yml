@@ -1,8 +1,8 @@
 name: AdvanceParticle
 main: me.Tixius24.advanceparticle.AdvanceParticle
 version: ${project.version}
-author: Tixius24
-website: https://www.spigotmc.org/resources/71929/
+authors: [Tixius24, DominikSLK]
+website: https://github.com/DominikSLK/AdvanceParticle
 api-version: 1.13
 commands:
   advanceparticle:
