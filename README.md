@@ -5,4 +5,4 @@ Original Spigot link: https://www.spigotmc.org/resources/71929/ (not working any
 
 Download: https://ci.funprogramming.eu/job/AdvanceParticle/
 
-Last plugin version: 16.5.0
+Last plugin version: 16.5.1

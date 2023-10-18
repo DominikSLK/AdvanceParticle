@@ -47,7 +47,7 @@ public class Reflection {
 			Field field = nms_player.getClass().getField(plugin.getVersionNumger() > 19 ? "c" : (plugin.getVersionNumger() > 16 ? "b" : "playerConnection"));
 			Object con_object = field.get(nms_player);
 
-			Method method = getMethod(con_object.getClass(), plugin.getVersionNumger() > 17 ? "a" : "sendPacket");
+			Method method = getMethod(con_object.getClass(), plugin.getServerVersion().equalsIgnoreCase("v1_20_R2") ? "b" : (plugin.getVersionNumger() > 17 ? "a" : "sendPacket"));
 			method.invoke(con_object, packet);
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -142,7 +142,8 @@ public class Reflection {
 	private static Class<?> getIRegistryClass() {
 		try {
 			if (plugin.getVersionNumger() > 16) {
-				if (plugin.getServerVersion().equals("v1_19_R2") || plugin.getServerVersion().equals("v1_19_R3") || plugin.getServerVersion().equals("v1_20_R1")) {
+				if (plugin.getServerVersion().equals("v1_19_R2") || plugin.getServerVersion().equals("v1_19_R3")
+						|| plugin.getServerVersion().equals("v1_20_R1") || plugin.getServerVersion().equals("v1_20_R2")) {
 					return Class.forName("net.minecraft.core.registries.BuiltInRegistries");
 				}
 				
