@@ -41,7 +41,8 @@ public class AdvanceParticle extends JavaPlugin implements Listener {
 		plugin = this;
 		
 		if (getVersionNumger() == 20) {
-			if (!version.equals("v1_20_R1") && !version.equals("v1_20_R2")) {
+			if (!version.equals("v1_20_R1") && !version.equals("v1_20_R2")
+					&& !version.equals("v1_20_R3")) {
 				Action_Unsapported_Version();
 				return;
 			}
