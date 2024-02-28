@@ -1,12 +1,17 @@
 package me.Tixius24.advanceparticle;
 
+import me.Tixius24.advanceparticle.object.EnumParticleObject;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
-public class Commands implements CommandExecutor {
+import java.util.ArrayList;
+import java.util.List;
+
+public class Commands implements CommandExecutor, TabCompleter {
 	private AdvanceParticle plugin;
 
 	public Commands(AdvanceParticle pl) {
@@ -190,7 +195,8 @@ public class Commands implements CommandExecutor {
 
 			if (args[0].equalsIgnoreCase("set")) {
 
-				if (!plugin.getAdvanceManager().checkBlockPerm(p, args[1])) { 
+				if (!p.hasPermission("advanceparticle.set") || !plugin.getAdvanceManager().checkBlockPerm(p, particle)) {
+					p.sendMessage(plugin.getManager().sendMessage("NOPERM"));
 					return true; 
 				}
 
@@ -206,12 +212,18 @@ public class Commands implements CommandExecutor {
 
 			if (args[0].equalsIgnoreCase("setlooking")) {
 
+				if (!p.hasPermission("advanceparticle.setlooking") || !plugin.getAdvanceManager().checkBlockPerm(p, particle)) {
+					p.sendMessage(plugin.getManager().sendMessage("NOPERM"));
+					return true;
+				}
+
 				if (plugin.getVersionNumger() < 8) {
 					p.sendMessage(plugin.getManager().sendMessage("ERROR_USE_SERVER_COMMAND"));
 					return true;
 				}
 
-				if (!plugin.getAdvanceManager().checkBlockPerm(p, args[1])) { 
+				if (!plugin.getAdvanceManager().checkBlockPerm(p, particle)) {
+					p.sendMessage(plugin.getManager().sendMessage("NOPERM"));
 					return true; 
 				}
 
@@ -264,4 +276,66 @@ public class Commands implements CommandExecutor {
 		p.sendMessage("§8=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
 	}
 
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
+		List<String> match = new ArrayList<>();
+
+		if (!(sender instanceof Player)) return match;
+		Player player = (Player) sender;
+        if (args.length == 1) {
+            List<String> commands = new ArrayList<>();
+            commands.add("help");
+            commands.add("particle");
+            commands.add("add");
+            commands.add("remove");
+            commands.add("reload");
+            commands.add("spawner");
+            commands.add("set");
+            commands.add("setlooking");
+            commands.add("info");
+            commands.add("tp");
+            commands.add("delete");
+
+            for (String command : commands) {
+                if (command.toLowerCase().contains(args[0].toLowerCase()) && player.hasPermission("advanceparticle." + command.replace("tp", "teleport"))) {
+                    match.add(command);
+                }
+            }
+        }
+        if (args.length > 1) {
+			if (args.length == 2) {
+				if (args[0].equalsIgnoreCase("add")) {
+					if (!player.hasPermission("advanceparticle.add")) {
+						return match;
+					}
+
+					for (EnumParticleObject particle : EnumParticleObject.values()) {
+						if (particle.toString().toLowerCase().contains(args[1].toLowerCase()) & plugin.getAdvanceManager().checkBlockPerm(player, particle.toString())) {
+							match.add(particle.toString());
+						}
+					}
+				} else if (args[0].equalsIgnoreCase("info") || args[0].equalsIgnoreCase("tp") || args[0].equalsIgnoreCase("delete")) {
+					if (!player.hasPermission("advanceparticle." + args[0].replace("tp", "teleport"))) {
+						return match;
+					}
+
+					for (String name : plugin.getStream().getBlockStream().keySet()) {
+						if (name.toLowerCase().contains(args[1].toLowerCase())) {
+							match.add(name);
+						}
+					}
+				}
+			} else if (args.length == 3) {
+				if (args[0].equalsIgnoreCase("set") || args[0].equalsIgnoreCase("setlooking")) {
+					for (EnumParticleObject particle : EnumParticleObject.values()) {
+						if (particle.toString().toLowerCase().contains(args[2].toLowerCase()) & plugin.getAdvanceManager().checkBlockPerm(player, particle.toString())) {
+							match.add(particle.toString());
+						}
+					}
+				}
+			}
+        }
+
+		return match;
+	}
 }

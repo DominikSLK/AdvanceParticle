@@ -87,8 +87,7 @@ public class AdvanceManager {
 	}
 
 	public boolean checkBlockPerm(Player p, String perm) {
-		if (!p.hasPermission("advanceparticle.block.*") && !p.hasPermission("advanceparticle.block." + perm.toLowerCase())) { 
-			p.sendMessage(plugin.getManager().sendMessage("NOPERM")); 
+		if (!p.hasPermission("advanceparticle.block.*") && !p.hasPermission("advanceparticle.block." + perm.toLowerCase())) {
 			return false; 
 		}
 
