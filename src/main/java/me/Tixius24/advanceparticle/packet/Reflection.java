@@ -142,8 +142,7 @@ public class Reflection {
 	private static Class<?> getIRegistryClass() {
 		try {
 			if (plugin.getVersionNumger() > 16) {
-				if (plugin.getServerVersion().equals("v1_19_R2") || plugin.getServerVersion().equals("v1_19_R3")
-						|| plugin.getServerVersion().equals("v1_20_R1") || plugin.getServerVersion().equals("v1_20_R2") || plugin.getServerVersion().equals("v1_20_R3")) {
+				if (plugin.getServerVersion().equals("v1_19_R2") || plugin.getServerVersion().equals("v1_19_R3") || plugin.getVersionNumger() > 19) {
 					return Class.forName("net.minecraft.core.registries.BuiltInRegistries");
 				}
 				
@@ -174,7 +173,7 @@ public class Reflection {
 			}
 			return "aa";
 		case 20:
-			if (plugin.getServerVersion().equals("v1_20_R3")) {
+			if (plugin.getServerVersion().equals("v1_20_R3") || plugin.getServerVersion().equals("v1_20_R4")) {
 				return "j";
 			}
 			return "k";

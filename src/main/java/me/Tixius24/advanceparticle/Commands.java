@@ -9,17 +9,19 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public class Commands implements CommandExecutor, TabCompleter {
-	private AdvanceParticle plugin;
+public class Commands extends Command implements CommandExecutor, TabCompleter {
+	private static AdvanceParticle plugin;
 
-	public Commands(AdvanceParticle pl) {
-		plugin = pl;
+	public Commands(AdvanceParticle pl, String name) {
+        super(name, "Plugin commands for AdvancedParticle", "", Collections.singletonList("ap"));
+        plugin = pl;
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+	public boolean execute(CommandSender sender, String label, String[] args) {
 
 		if (!(sender instanceof Player)) {
 			sender.sendMessage(plugin.getManager().sendMessage("CONSOLE"));			
@@ -277,32 +279,32 @@ public class Commands implements CommandExecutor, TabCompleter {
 	}
 
 	@Override
-	public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
+	public List<String> tabComplete(CommandSender sender, String label, String[] args) throws IllegalArgumentException {
 		List<String> match = new ArrayList<>();
 
 		if (!(sender instanceof Player)) return match;
 		Player player = (Player) sender;
-        if (args.length == 1) {
-            List<String> commands = new ArrayList<>();
-            commands.add("help");
-            commands.add("particle");
-            commands.add("add");
-            commands.add("remove");
-            commands.add("reload");
-            commands.add("spawner");
-            commands.add("set");
-            commands.add("setlooking");
-            commands.add("info");
-            commands.add("tp");
-            commands.add("delete");
+		if (args.length == 1) {
+			List<String> commands = new ArrayList<>();
+			commands.add("help");
+			commands.add("particle");
+			commands.add("add");
+			commands.add("remove");
+			commands.add("reload");
+			commands.add("spawner");
+			commands.add("set");
+			commands.add("setlooking");
+			commands.add("info");
+			commands.add("tp");
+			commands.add("delete");
 
-            for (String command : commands) {
-                if (command.toLowerCase().contains(args[0].toLowerCase()) && player.hasPermission("advanceparticle." + command.replace("tp", "teleport"))) {
-                    match.add(command);
-                }
-            }
-        }
-        if (args.length > 1) {
+			for (String command : commands) {
+				if (command.toLowerCase().contains(args[0].toLowerCase()) && player.hasPermission("advanceparticle." + command.replace("tp", "teleport"))) {
+					match.add(command);
+				}
+			}
+		}
+		if (args.length > 1) {
 			if (args.length == 2) {
 				if (args[0].equalsIgnoreCase("add")) {
 					if (!player.hasPermission("advanceparticle.add")) {
@@ -334,8 +336,18 @@ public class Commands implements CommandExecutor, TabCompleter {
 					}
 				}
 			}
-        }
+		}
 
 		return match;
+	}
+
+	@Override
+	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+		return execute(sender, label, args);
+	}
+
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
+		return tabComplete(sender, label, args);
 	}
 }

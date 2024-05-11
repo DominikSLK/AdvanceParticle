@@ -31,18 +31,34 @@ public class AdvanceParticle extends JavaPlugin implements Listener {
 	private MySQLManager mysql;
 	private AdvanceManager ap_manager;
 
-	private String version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
-	private int versionNumber = Integer.parseInt(version.split("_")[1]);
+	private String version;
+	private int versionNumber;
 	private static AdvanceParticle plugin;
 
 	public boolean useMySQL = false;
 
 	public void onEnable() {
 		plugin = this;
-		
+
+		try {
+			version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
+			versionNumber = Integer.parseInt(version.split("_")[1]);
+		} catch (Exception e) {
+			String ver = Bukkit.getServer().getBukkitVersion().split("-")[0];
+			versionNumber = Integer.parseInt(ver.split("\\.")[1]);
+			int minorVersion = Integer.parseInt(ver.split("\\.")[2]);
+			if (versionNumber == 20) {
+				if (minorVersion > 4) {
+					version = "v1_20_R4";
+				}
+			} else {
+				Action_Unsapported_Version();
+			}
+		}
+
 		if (getVersionNumger() == 20) {
 			if (!version.equals("v1_20_R1") && !version.equals("v1_20_R2")
-					&& !version.equals("v1_20_R3")) {
+					&& !version.equals("v1_20_R3") && !version.equals("v1_20_R4")) {
 				Action_Unsapported_Version();
 				return;
 			}
@@ -64,7 +80,12 @@ public class AdvanceParticle extends JavaPlugin implements Listener {
 			new Metrics(this, 7949);
 
 		Bukkit.getPluginManager().registerEvents(this, this);
-		getCommand("advanceparticle").setExecutor(new Commands(this));
+
+		if (getCommand("advanceparticle") != null) {
+			getCommand("advanceparticle").setExecutor(new Commands(this, "advanceparticle"));
+		} else {
+			Bukkit.getServer().getCommandMap().register("advanceparticle", new Commands(this, "advanceparticle"));
+		}
 
 		mysql = new MySQLManager(this, manager.getPluginConfig().getString("MySQL.host"), 
 				manager.getPluginConfig().getString("MySQL.database"),

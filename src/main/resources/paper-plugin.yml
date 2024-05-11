@@ -3,8 +3,4 @@ main: me.Tixius24.advanceparticle.AdvanceParticle
 version: ${project.version}
 authors: [Tixius24, DominikSLK]
 website: https://github.com/DominikSLK/AdvanceParticle
-api-version: '1.13'
-commands:
-  advanceparticle:
-    description: Plugin commands for AdvancedParticle
-    aliases: ap
+api-version: '1.20'
