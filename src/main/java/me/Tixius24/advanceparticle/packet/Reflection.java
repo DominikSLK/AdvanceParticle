@@ -44,10 +44,10 @@ public class Reflection {
 	public static void sendPacket(Player p, Object packet) {
 		try {
 			Object nms_player = getPlayer(p);
-			Field field = nms_player.getClass().getField(plugin.getVersionNumger() > 19 ? "c" : (plugin.getVersionNumger() > 16 ? "b" : "playerConnection"));
+			Field field = nms_player.getClass().getField(plugin.getVersionNumber() > 19 ? "c" : (plugin.getVersionNumber() > 16 ? "b" : "playerConnection"));
 			Object con_object = field.get(nms_player);
 
-			Method method = getMethod(con_object.getClass(), (plugin.getVersionNumger() > 19 && !plugin.getServerVersion().equalsIgnoreCase("v1_20_R1")) ? "b" : (plugin.getVersionNumger() > 17 ? "a" : "sendPacket"));
+			Method method = getMethod(con_object.getClass(), (plugin.getVersionNumber() > 19 && !plugin.getServerVersion().equalsIgnoreCase("v1_20_R1")) ? "b" : (plugin.getVersionNumber() > 17 ? "a" : "sendPacket"));
 			method.invoke(con_object, packet);
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -66,7 +66,7 @@ public class Reflection {
 
 	public static Class<?> getNMSClass(String className) {
 		try {
-			if (plugin.getVersionNumger() < 17) {
+			if (plugin.getVersionNumber() < 17) {
 				return Class.forName("net.minecraft.server." + plugin.getServerVersion() + "." + className);
 			} else {
 				if (className.equals("Packet")) {
@@ -83,10 +83,10 @@ public class Reflection {
 	}
 
 	public static Object getParticle(String particleName) {
-		if (plugin.getVersionNumger() < 8) 
+		if (plugin.getVersionNumber() < 8)
 			return particleName;
 
-		if (plugin.getVersionNumger() < 13) {
+		if (plugin.getVersionNumber() < 13) {
 			Class<?> c = Reflection.getNMSClass("EnumParticle");
 
 			for (Object object : c.getEnumConstants()) {
@@ -102,8 +102,14 @@ public class Reflection {
 
 		try {
 			Class<?> cls = getMinecraftKeyClass("MinecraftKey");
-			Object key = cls.getConstructor(String.class).newInstance(particleName);
-			Class<?> c = null;
+			Object key;
+			Class<?> c;
+
+			if (plugin.getVersionNumber() > 20) {
+				key = cls.getMethod("b", String.class).invoke(null, particleName);
+			} else {
+				key = cls.getConstructor(String.class).newInstance(particleName);
+			}
 
 			if (plugin.getServerVersion().equals("v1_13_R1")) {
 				c = Reflection.getNMSClass("Particle");
@@ -115,8 +121,8 @@ public class Reflection {
 
 			c = getIRegistryClass();
 
-			Object object = c.getDeclaredField(getIRegistryParam(plugin.getVersionNumger())).get(null);
-			Method gets = object.getClass().getMethod(plugin.getVersionNumger() > 17 ? "a" : "get", cls);
+			Object object = c.getDeclaredField(getIRegistryParam(plugin.getVersionNumber())).get(null);
+			Method gets = object.getClass().getMethod(plugin.getVersionNumber() > 17 ? "a" : "get", cls);
 			particle = gets.invoke(object, key);
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -127,7 +133,7 @@ public class Reflection {
 	
 	private static Class<?> getMinecraftKeyClass(String className) {
 		try {
-			if (plugin.getVersionNumger() > 16) {
+			if (plugin.getVersionNumber() > 16) {
 				return Class.forName("net.minecraft.resources." + className);
 			}
 
@@ -141,8 +147,8 @@ public class Reflection {
 
 	private static Class<?> getIRegistryClass() {
 		try {
-			if (plugin.getVersionNumger() > 16) {
-				if (plugin.getServerVersion().equals("v1_19_R2") || plugin.getServerVersion().equals("v1_19_R3") || plugin.getVersionNumger() > 19) {
+			if (plugin.getVersionNumber() > 16) {
+				if (plugin.getServerVersion().equals("v1_19_R2") || plugin.getServerVersion().equals("v1_19_R3") || plugin.getVersionNumber() > 19) {
 					return Class.forName("net.minecraft.core.registries.BuiltInRegistries");
 				}
 				
@@ -177,6 +183,8 @@ public class Reflection {
 				return "j";
 			}
 			return "k";
+		case 21:
+			return "i";
 		default:
 			return "PARTICLE_TYPE";
 		}

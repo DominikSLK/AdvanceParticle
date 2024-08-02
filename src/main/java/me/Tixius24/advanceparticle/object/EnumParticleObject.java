@@ -52,7 +52,7 @@ public enum EnumParticleObject {
 	private float g;
 	private float h;
 	private int i;
-	private int j = AdvanceParticle.getInstance().getVersionNumger();
+	private int j = AdvanceParticle.getInstance().getVersionNumber();
 
 	private EnumParticleObject(String arg1, String arg2, String arg3, boolean bol, float arg4, float arg5, float arg6, float speed, int count) {
 		a_5 = arg1;

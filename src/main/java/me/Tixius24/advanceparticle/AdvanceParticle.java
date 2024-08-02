@@ -46,26 +46,29 @@ public class AdvanceParticle extends JavaPlugin implements Listener {
 		} catch (Exception e) {
 			String ver = Bukkit.getServer().getBukkitVersion().split("-")[0];
 			versionNumber = Integer.parseInt(ver.split("\\.")[1]);
-			int minorVersion = Integer.parseInt(ver.split("\\.")[2]);
+			int minorVersion = ver.split("\\.").length > 2 ? Integer.parseInt(ver.split("\\.")[2]) : 0;
 			if (versionNumber == 20) {
 				if (minorVersion > 4) {
 					version = "v1_20_R4";
 				}
+			} else if (versionNumber == 21) {
+				if (minorVersion == 0) {
+					version = "v1_21_R1";
+				}
 			} else {
-				Action_Unsapported_Version();
+				Action_Unsupported_Version();
 			}
 		}
 
-		if (getVersionNumger() == 20) {
-			if (!version.equals("v1_20_R1") && !version.equals("v1_20_R2")
-					&& !version.equals("v1_20_R3") && !version.equals("v1_20_R4")) {
-				Action_Unsapported_Version();
+		if (getVersionNumber() == 21) {
+			if (!version.equals("v1_21_R1")) {
+				Action_Unsupported_Version();
 				return;
 			}
 		}
 
-		if (getVersionNumger() < 5 || getVersionNumger() > 20) {
-			Action_Unsapported_Version();
+		if (getVersionNumber() < 5 || getVersionNumber() > 21) {
+			Action_Unsupported_Version();
 			return;
 		}
 
@@ -115,7 +118,7 @@ public class AdvanceParticle extends JavaPlugin implements Listener {
 		consoleLog("§8=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
 	}
 	
-	private void Action_Unsapported_Version() {
+	private void Action_Unsupported_Version() {
 		consoleLog("§8=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
 		consoleLog("§c> Your server version is not supported!!");
 		consoleLog("§c> AdvanceParticle plugin is turned off !!!");
@@ -155,7 +158,7 @@ public class AdvanceParticle extends JavaPlugin implements Listener {
 		return version;
 	}
 
-	public int getVersionNumger() {
+	public int getVersionNumber() {
 		return versionNumber;
 	}
 
@@ -222,7 +225,7 @@ public class AdvanceParticle extends JavaPlugin implements Listener {
 				while (true) {
 					try {
 						for (Player p : players.keySet()) {
-							if (getVersionNumger() > 7) {
+							if (getVersionNumber() > 7) {
 								if (p.getGameMode() != GameMode.SPECTATOR) {
 									for (Player pl : p.getWorld().getPlayers()) {
 										Location loc = p.getLocation();

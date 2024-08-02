@@ -117,13 +117,13 @@ public class AdvanceManager {
 			return false;
 		}
 
-		if (plugin.getVersionNumger() < 9) {
+		if (plugin.getVersionNumber() < 9) {
 			if (particle.equalsIgnoreCase("dragon_breath") || particle.equalsIgnoreCase("end_rod") || particle.equalsIgnoreCase("damage_indicator") || particle.equalsIgnoreCase("sweep_attack")) { 
 				return false;
 			}
 		}
 
-		if (plugin.getVersionNumger() < 7) {
+		if (plugin.getVersionNumber() < 7) {
 			if (particle.equalsIgnoreCase("water_wake")) { 
 				return false;
 			}

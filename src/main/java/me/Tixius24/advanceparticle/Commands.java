@@ -219,7 +219,7 @@ public class Commands extends Command implements CommandExecutor, TabCompleter {
 					return true;
 				}
 
-				if (plugin.getVersionNumger() < 8) {
+				if (plugin.getVersionNumber() < 8) {
 					p.sendMessage(plugin.getManager().sendMessage("ERROR_USE_SERVER_COMMAND"));
 					return true;
 				}

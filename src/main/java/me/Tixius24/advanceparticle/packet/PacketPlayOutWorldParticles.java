@@ -13,14 +13,14 @@ public class PacketPlayOutWorldParticles {
 
 			Class<?> nms_class = Reflection.getNMSClass(getPacketName());
 
-			if (plugin.getVersionNumger() > 16) {
+			if (plugin.getVersionNumber() > 16) {
 				return nms_class.getConstructor(getParticleParamClass(), boolean.class, double.class, double.class, double.class, float.class, float.class, float.class, float.class, int.class).
 						newInstance(Reflection.getParticle(po.get()), po.getBoolean(), x, y, z, po.OffSetX(), po.OffSetY(), po.OffSetZ(), po.getSpeed(), po.getCount());
 			}
 
 			Object packet = nms_class.getConstructor().newInstance();
 
-			if (plugin.getVersionNumger() > 12) {
+			if (plugin.getVersionNumber() > 12) {
 				Reflection.setField(packet, "j", Reflection.getParticle(po.get()));
 				Reflection.setField(packet, "a", (float) x);
 				Reflection.setField(packet, "b", (float) y);
@@ -43,7 +43,7 @@ public class PacketPlayOutWorldParticles {
 			Reflection.setField(packet, "g", po.OffSetZ());
 			Reflection.setField(packet, "h", po.getSpeed());
 			Reflection.setField(packet, "i", po.getCount());
-			if (plugin.getVersionNumger() >= 8) Reflection.setField(packet, "j", po.getBoolean());
+			if (plugin.getVersionNumber() >= 8) Reflection.setField(packet, "j", po.getBoolean());
 
 			return packet;
 		} catch (Exception ex) {
@@ -54,7 +54,7 @@ public class PacketPlayOutWorldParticles {
 	}
 
 	private static String getPacketName() {
-		if (plugin.getVersionNumger() < 7) {
+		if (plugin.getVersionNumber() < 7) {
 			return "Packet63WorldParticles";
 		}
 
