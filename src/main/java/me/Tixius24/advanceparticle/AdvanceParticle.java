@@ -52,14 +52,18 @@ public class AdvanceParticle extends JavaPlugin implements Listener {
 					version = "v1_20_R4";
 				}
 			} else if (versionNumber == 21) {
-				version = "v1_21_R1";
+				if (minorVersion < 2) {
+					version = "v1_21_R1";
+				} else {
+					version = "v1_21_R2";
+				}
 			} else {
 				Action_Unsupported_Version();
 			}
 		}
 
 		if (getVersionNumber() == 21) {
-			if (!version.equals("v1_21_R1")) {
+			if (!version.equals("v1_21_R1") && !version.equals("v1_21_R2")) {
 				Action_Unsupported_Version();
 				return;
 			}

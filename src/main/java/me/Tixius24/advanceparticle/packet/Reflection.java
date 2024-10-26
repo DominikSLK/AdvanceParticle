@@ -44,7 +44,7 @@ public class Reflection {
 	public static void sendPacket(Player p, Object packet) {
 		try {
 			Object nms_player = getPlayer(p);
-			Field field = nms_player.getClass().getField(plugin.getVersionNumber() > 19 ? "c" : (plugin.getVersionNumber() > 16 ? "b" : "playerConnection"));
+			Field field = nms_player.getClass().getField(plugin.getServerVersion().equalsIgnoreCase("v1_21_R2") ? "f" : plugin.getVersionNumber() > 19 ? "c" : (plugin.getVersionNumber() > 16 ? "b" : "playerConnection"));
 			Object con_object = field.get(nms_player);
 
 			Method method = getMethod(con_object.getClass(), (plugin.getVersionNumber() > 19 && !plugin.getServerVersion().equalsIgnoreCase("v1_20_R1")) ? "b" : (plugin.getVersionNumber() > 17 ? "a" : "sendPacket"));
