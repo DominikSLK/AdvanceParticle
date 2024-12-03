@@ -14,8 +14,13 @@ public class PacketPlayOutWorldParticles {
 			Class<?> nms_class = Reflection.getNMSClass(getPacketName());
 
 			if (plugin.getVersionNumber() > 16) {
-				return nms_class.getConstructor(getParticleParamClass(), boolean.class, double.class, double.class, double.class, float.class, float.class, float.class, float.class, int.class).
-						newInstance(Reflection.getParticle(po.get()), po.getBoolean(), x, y, z, po.OffSetX(), po.OffSetY(), po.OffSetZ(), po.getSpeed(), po.getCount());
+				if (plugin.getServerVersion().equalsIgnoreCase("v1_21_R3")) {
+					return nms_class.getConstructor(getParticleParamClass(), boolean.class, boolean.class, double.class, double.class, double.class, float.class, float.class, float.class, float.class, int.class).
+							newInstance(Reflection.getParticle(po.get()), po.getBoolean(), po.getBoolean(), x, y, z, po.OffSetX(), po.OffSetY(), po.OffSetZ(), po.getSpeed(), po.getCount());
+				} else {
+					return nms_class.getConstructor(getParticleParamClass(), boolean.class, double.class, double.class, double.class, float.class, float.class, float.class, float.class, int.class).
+							newInstance(Reflection.getParticle(po.get()), po.getBoolean(), x, y, z, po.OffSetX(), po.OffSetY(), po.OffSetZ(), po.getSpeed(), po.getCount());
+				}
 			}
 
 			Object packet = nms_class.getConstructor().newInstance();
