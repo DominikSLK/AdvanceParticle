@@ -58,8 +58,10 @@ public class AdvanceParticle extends JavaPlugin implements Listener {
 					version = "v1_21_R2";
 				} else if (minorVersion < 5) {
 					version = "v1_21_R3";
-				} else {
+				} else if (minorVersion < 6) {
 					version = "v1_21_R4";
+				} else {
+					version = "v1_21_R5";
 				}
 			} else {
 				Action_Unsupported_Version();
@@ -67,7 +69,7 @@ public class AdvanceParticle extends JavaPlugin implements Listener {
 		}
 
 		if (getVersionNumber() == 21) {
-			if (!version.equals("v1_21_R1") && !version.equals("v1_21_R2") && !version.equals("v1_21_R3") && !version.equals("v1_21_R4")) {
+			if (!version.equals("v1_21_R1") && !version.equals("v1_21_R2") && !version.equals("v1_21_R3") && !version.equals("v1_21_R4") && !version.equals("v1_21_R5")) {
 				Action_Unsupported_Version();
 				return;
 			}
@@ -90,9 +92,13 @@ public class AdvanceParticle extends JavaPlugin implements Listener {
 
 		Bukkit.getPluginManager().registerEvents(this, this);
 
-		if (getCommand("advanceparticle") != null) {
-			getCommand("advanceparticle").setExecutor(new Commands(this, "advanceparticle"));
-		} else {
+		try {
+			if (getCommand("advanceparticle") != null) {
+				getCommand("advanceparticle").setExecutor(new Commands(this, "advanceparticle"));
+			} else {
+				Bukkit.getServer().getCommandMap().register("advanceparticle", new Commands(this, "advanceparticle"));
+			}
+		} catch (UnsupportedOperationException e) {
 			Bukkit.getServer().getCommandMap().register("advanceparticle", new Commands(this, "advanceparticle"));
 		}
 
