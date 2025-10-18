@@ -60,8 +60,10 @@ public class AdvanceParticle extends JavaPlugin implements Listener {
 					version = "v1_21_R3";
 				} else if (minorVersion < 6) {
 					version = "v1_21_R4";
-				} else {
+				} else if (minorVersion < 9) {
 					version = "v1_21_R5";
+				} else {
+					version = "v1_21_R6";
 				}
 			} else {
 				Action_Unsupported_Version();
@@ -69,7 +71,7 @@ public class AdvanceParticle extends JavaPlugin implements Listener {
 		}
 
 		if (getVersionNumber() == 21) {
-			if (!version.equals("v1_21_R1") && !version.equals("v1_21_R2") && !version.equals("v1_21_R3") && !version.equals("v1_21_R4") && !version.equals("v1_21_R5")) {
+			if (!version.equals("v1_21_R1") && !version.equals("v1_21_R2") && !version.equals("v1_21_R3") && !version.equals("v1_21_R4") && !version.equals("v1_21_R5") && !version.equals("v1_21_R6")) {
 				Action_Unsupported_Version();
 				return;
 			}
