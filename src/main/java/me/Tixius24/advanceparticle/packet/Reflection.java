@@ -44,7 +44,7 @@ public class Reflection {
 	public static void sendPacket(Player p, Object packet) {
 		try {
 			Object nms_player = getPlayer(p);
-			Field field = nms_player.getClass().getField((plugin.getServerVersion().equalsIgnoreCase("v1_21_R5") || plugin.getServerVersion().equalsIgnoreCase("v1_21_R6")) ? "g" : (plugin.getServerVersion().equalsIgnoreCase("v1_21_R2") || plugin.getServerVersion().equalsIgnoreCase("v1_21_R3") || plugin.getServerVersion().equalsIgnoreCase("v1_21_R4")) ? "f" : plugin.getVersionNumber() > 19 ? "c" : (plugin.getVersionNumber() > 16 ? "b" : "playerConnection"));
+			Field field = nms_player.getClass().getField((plugin.getServerVersion().equalsIgnoreCase("v1_21_R5") || plugin.getServerVersion().equalsIgnoreCase("v1_21_R6") || plugin.getServerVersion().equalsIgnoreCase("v1_21_R7")) ? "g" : (plugin.getServerVersion().equalsIgnoreCase("v1_21_R2") || plugin.getServerVersion().equalsIgnoreCase("v1_21_R3") || plugin.getServerVersion().equalsIgnoreCase("v1_21_R4")) ? "f" : plugin.getVersionNumber() > 19 ? "c" : (plugin.getVersionNumber() > 16 ? "b" : "playerConnection"));
 			Object con_object = field.get(nms_player);
 
 			Method method = getMethod(con_object.getClass(), (plugin.getVersionNumber() > 19 && !plugin.getServerVersion().equalsIgnoreCase("v1_20_R1")) ? "b" : (plugin.getVersionNumber() > 17 ? "a" : "sendPacket"));
@@ -184,7 +184,7 @@ public class Reflection {
 			}
 			return "k";
 		case 21:
-			if (plugin.getServerVersion().equals("v1_21_R6")) {
+			if (plugin.getServerVersion().equals("v1_21_R6") || plugin.getServerVersion().equals("v1_21_R7")) {
 				return "j";
 			}
 			return "i";

@@ -14,7 +14,7 @@ public class PacketPlayOutWorldParticles {
 			Class<?> nms_class = Reflection.getNMSClass(getPacketName());
 
 			if (plugin.getVersionNumber() > 16) {
-				if (plugin.getServerVersion().equalsIgnoreCase("v1_21_R3") || plugin.getServerVersion().equalsIgnoreCase("v1_21_R4") || plugin.getServerVersion().equalsIgnoreCase("v1_21_R5") || plugin.getServerVersion().equalsIgnoreCase("v1_21_R6")) {
+				if (plugin.getServerVersion().equalsIgnoreCase("v1_21_R3") || plugin.getServerVersion().equalsIgnoreCase("v1_21_R4") || plugin.getServerVersion().equalsIgnoreCase("v1_21_R5") || plugin.getServerVersion().equalsIgnoreCase("v1_21_R6") || plugin.getServerVersion().equalsIgnoreCase("v1_21_R7")) {
 					return nms_class.getConstructor(getParticleParamClass(), boolean.class, boolean.class, double.class, double.class, double.class, float.class, float.class, float.class, float.class, int.class).
 							newInstance(Reflection.getParticle(po.get()), po.getBoolean(), po.getBoolean(), x, y, z, po.OffSetX(), po.OffSetY(), po.OffSetZ(), po.getSpeed(), po.getCount());
 				} else {
